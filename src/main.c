@@ -6,7 +6,7 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/14 19:15:13 by tredfort          #+#    #+#             */
-/*   Updated: 2021/03/14 19:15:16 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/03/16 21:55:40 by smephest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ int main(int argc, char **argv, char **env)
 		i = 0;
 		while (read(0, &b, 1) && b != '\n')
 			buffeer[i++] = b;
+		//comment two
 		buffeer[i] = '\0';
+		//comment
 		if (!strcmp(buffeer, "pwd"))
 		{
 			getcwd(dir, BUFFER_SIZE);
