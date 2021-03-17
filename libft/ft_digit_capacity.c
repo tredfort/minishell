@@ -1,18 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_digit_capacity.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/14 19:17:11 by tredfort          #+#    #+#             */
-/*   Updated: 2021/03/14 19:17:13 by tredfort         ###   ########.fr       */
+/*   Created: 2021/02/05 08:47:48 by tredfort          #+#    #+#             */
+/*   Updated: 2021/02/05 08:51:07 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "../libft/libft.h"
-# include <unistd.h>
+#include "libft.h"
 
-#endif
+int		ft_digit_capacity(int nb)
+{
+	int	len;
+
+	len = 0;
+	while (nb)
+	{
+		len++;
+		nb /= 10;
+	}
+	return (len);
+}

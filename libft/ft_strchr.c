@@ -1,18 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/14 19:17:11 by tredfort          #+#    #+#             */
-/*   Updated: 2021/03/14 19:17:13 by tredfort         ###   ########.fr       */
+/*   Created: 2020/10/31 15:58:44 by tredfort          #+#    #+#             */
+/*   Updated: 2020/10/31 16:31:57 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "../libft/libft.h"
-# include <unistd.h>
-
-#endif
+char	*ft_strchr(const char *s, int c)
+{
+	while (*s)
+		if (*(s++) == c)
+			return ((char *)(--s));
+	if (!c)
+		return ((char *)s);
+	return (0);
+}

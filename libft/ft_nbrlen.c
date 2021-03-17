@@ -1,18 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_nbrlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/14 19:17:11 by tredfort          #+#    #+#             */
-/*   Updated: 2021/03/14 19:17:13 by tredfort         ###   ########.fr       */
+/*   Created: 2020/12/11 19:13:02 by tredfort          #+#    #+#             */
+/*   Updated: 2021/02/05 08:35:51 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "../libft/libft.h"
-# include <unistd.h>
+int		ft_nbrlen(const char *s)
+{
+	int count;
 
-#endif
+	count = 0;
+	while (s && *s == '0')
+		s++;
+	while (s && *s >= '0' && *s <= '9' && s++)
+		count++;
+	return (count);
+}

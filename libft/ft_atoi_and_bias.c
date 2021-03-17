@@ -1,18 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_atoi_and_bias.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/14 19:17:11 by tredfort          #+#    #+#             */
-/*   Updated: 2021/03/14 19:17:13 by tredfort         ###   ########.fr       */
+/*   Created: 2021/01/28 07:44:50 by tredfort          #+#    #+#             */
+/*   Updated: 2021/01/28 08:00:45 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "../libft/libft.h"
-# include <unistd.h>
+#include "libft.h"
 
-#endif
+int		ft_atoi_and_bias(char **str)
+{
+	int nb;
+	int sign;
+
+	nb = 0;
+	sign = 1;
+	while (*(*str) && ((*(*str) >= '\t' && *(*str) <= '\r') || *(*str) == ' '))
+		(*str)++;
+	if (*(*str) == '-')
+		sign = -1;
+	if (*(*str) == '-' || *(*str) == '+')
+		(*str)++;
+	while (*(*str) && ft_isdigit(*(*str)))
+		nb = nb * 10 + *(*str)++ - '0';
+	return (sign * nb);
+}

@@ -1,18 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/14 19:17:11 by tredfort          #+#    #+#             */
-/*   Updated: 2021/03/14 19:17:13 by tredfort         ###   ########.fr       */
+/*   Created: 2020/11/02 10:17:54 by tredfort          #+#    #+#             */
+/*   Updated: 2020/11/02 11:20:27 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "../libft/libft.h"
-# include <unistd.h>
+#include "libft.h"
 
-#endif
+void	*ft_calloc(size_t count, size_t size)
+{
+	char	*new;
+	size_t	total;
+	size_t	i;
+
+	i = 0;
+	total = size * count;
+	if (!(new = malloc(total)))
+		return (0);
+	while (total-- > 0)
+	{
+		new[i] = 0;
+		i++;
+	}
+	return ((void *)new);
+}

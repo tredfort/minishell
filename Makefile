@@ -24,7 +24,7 @@ CC = gcc
 
 FLAGS = #-Wall -Wextra -Werror
 
-all: $(NAME)
+all: $(LIBFT) $(NAME)
 
 %o : %c #includes/minishell.h
 	$(CC) $(FLAGS) $< -o $@
@@ -37,7 +37,7 @@ $(NAME): $(OBJECTS)
 
 clean:
 	rm -f $(OBJECTS)
-	#make clean -C libft
+	make clean -C libft
 
 fclean: clean
 	rm -f $(NAME)

@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 #define BUFFER_SIZE 100
 
 int main(int argc, char **argv, char **env)
@@ -22,10 +23,8 @@ int main(int argc, char **argv, char **env)
 	char	dir[BUFFER_SIZE];
 	int 	i;
 
-	if (argc && argv[0])
+	while (1)
 	{
-		for (int i = 0; env[i]; i++)
-			printf("%s\n", env[i]);
 		write(0, "bash-3.2$ ", 10);
 		i = 0;
 		while (read(0, &b, 1) && b != '\n')
@@ -37,8 +36,16 @@ int main(int argc, char **argv, char **env)
 		{
 			getcwd(dir, BUFFER_SIZE);
 			write(0, dir, strlen(dir));
+			write(1, "\n", 1);
 		}
-		write(0, "\n", 1);
+		else if (!strcmp(buffeer, "env"))
+		{
+			i = 0;
+			while (env[i])
+				printf("%s\n", env[i++]);
+		}
+		else if (!strcmp(buffeer, "exit"))
+			exit(0);
 	}
 	return 0;
 }

@@ -1,18 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/14 19:17:11 by tredfort          #+#    #+#             */
-/*   Updated: 2021/03/14 19:17:13 by tredfort         ###   ########.fr       */
+/*   Created: 2020/11/06 19:33:58 by tredfort          #+#    #+#             */
+/*   Updated: 2020/11/06 23:05:48 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "../libft/libft.h"
-# include <unistd.h>
+#include "libft.h"
 
-#endif
+void	ft_lstclear(t_list **lst, void (*del)(void*))
+{
+	t_list	*ptr;
+	t_list	*tmp;
+
+	ptr = *lst;
+	while (ptr)
+	{
+		tmp = ptr->next;
+		ft_lstdelone(ptr, del);
+		ptr = tmp;
+	}
+	*lst = NULL;
+}
