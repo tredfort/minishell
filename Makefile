@@ -10,15 +10,21 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = minishell
+NAME =		minishell
 
-LIBFT = libft.a
+LIBFT =		libft/libft.a
 
-SRCS = main.c
+DIR_SRCS = src
 
-SRCS2 = $(addprefix src/, $(SRCS))
+DIR_OBJS = objects
 
-OBJECTS = $(SRCS2:.c=.o)
+SRCS =		main.c \
+			get_next_line.c
+
+#SRCS :=		$(addprefix $(DIR_SRCS), $(SRCS))
+
+OBJS =		$(addprefix $(DIR_OBJS)/, $(SRCS:.c=.o))
+
 
 CC = gcc
 
@@ -26,21 +32,22 @@ FLAGS = #-Wall -Wextra -Werror
 
 all: $(LIBFT) $(NAME)
 
-%o : %c #includes/minishell.h
-	$(CC) $(FLAGS) $< -o $@
+$(DIR_OBJS)/%.o:$(DIR_SRCS)/%.c includes/minishell.h
+	mkdir -p objects
+	$(CC) $(FLAGS) -c $< -o $@
 
 $(LIBFT):
 	make -C libft
 
-$(NAME): $(OBJECTS)
-	$(CC) $(SRCS2) -o $(NAME)
+$(NAME): $(OBJS)
+	$(CC) $^ -Llibft -lft -o $@
 
 clean:
-	rm -f $(OBJECTS)
+	rm -rf $(DIR_OBJS)
 	make clean -C libft
 
 fclean: clean
-	rm -f $(NAME)
+	rm -rf $(NAME)
 	make fclean -C libft
 
 re: fclean all

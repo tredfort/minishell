@@ -14,5 +14,11 @@
 # define MINISHELL_H
 # include "../libft/libft.h"
 # include <unistd.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <string.h>
+# include <stdlib.h>
+
+int			get_next_line(int fd, char **line);
 
 #endif

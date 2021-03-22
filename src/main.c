@@ -10,42 +10,52 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
+#include "../includes/minishell.h"
+#include <term.h>
 #define BUFFER_SIZE 100
 
 int main(int argc, char **argv, char **env)
 {
-	char	b;
-	char	buffeer[BUFFER_SIZE];
+	char	*line;
 	char	dir[BUFFER_SIZE];
 	int 	i;
+	struct termios term;
 
+//	tcgetattr(0, &term);
+//	term.c_lflag &= ~(ECHO);
+//	tcsetattr(0, TCSANOW, &term);
 	while (1)
 	{
 		write(0, "bash-3.2$ ", 10);
-		i = 0;
-		while (read(0, &b, 1) && b != '\n')
-			buffeer[i++] = b;
-		//comment two
-		buffeer[i] = '\0';
-		//comment
-		if (!strcmp(buffeer, "pwd"))
+		get_next_line(STDIN_FILENO, &line);
+		if (!strcmp(line, "pwd"))
 		{
 			getcwd(dir, BUFFER_SIZE);
-			write(0, dir, strlen(dir));
-			write(1, "\n", 1);
+			printf("%s\n", dir);
+			free(line);
 		}
-		else if (!strcmp(buffeer, "env"))
+		else if (!strcmp(line, "env"))
 		{
 			i = 0;
 			while (env[i])
 				printf("%s\n", env[i++]);
+			free(line);
 		}
-		else if (!strcmp(buffeer, "exit"))
-			exit(0);
+		else if (!strcmp(line, "exit"))
+		{
+			printf("exit\n");
+			free(line);
+			return 0;
+		}
+		else if (!strncmp(line, "echo", 4))
+		{
+			printf("%s\n", line + 5);
+			free(line);
+		}
+		else
+		{
+			printf("%s\n", line);
+			free(line);
+		}
 	}
-	return 0;
 }
