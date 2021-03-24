@@ -19,7 +19,8 @@ DIR_SRCS = src
 DIR_OBJS = objects
 
 SRCS =		main.c \
-			get_next_line.c
+			get_next_line.c \
+			history.c
 
 #SRCS :=		$(addprefix $(DIR_SRCS), $(SRCS))
 
@@ -34,13 +35,13 @@ all: $(LIBFT) $(NAME)
 
 $(DIR_OBJS)/%.o:$(DIR_SRCS)/%.c includes/minishell.h
 	mkdir -p objects
-	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) -g $(FLAGS) -c $< -o $@
 
 $(LIBFT):
 	make -C libft
 
 $(NAME): $(OBJS)
-	$(CC) $^ -Llibft -lft -o $@
+	$(CC) $^ -Llibft -lft -ltermcap -o $@
 
 clean:
 	rm -rf $(DIR_OBJS)
