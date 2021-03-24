@@ -29,6 +29,21 @@
 # include <string.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <errno.h>
+# include <term.h>
+# define SHELL_BUFFER 4097
+
+typedef struct	s_item
+{
+	char		*key;
+	char 		*value;
+}				t_item;
+
+
+typedef struct	s_sh
+{
+	t_list		*env_dict;
+}				t_sh;
 
 typedef struct	s_2list
 {
@@ -37,10 +52,37 @@ typedef struct	s_2list
 	void		*next;
 } 				t_2list;
 
+t_sh			sh;
+
 int			get_next_line(int fd, char **line);
 int			init_history(char *file, t_2list **list);
 t_2list		*ft_2lstnew(void *content);
 void		ft_2lstadd_front(t_2list **lst, t_2list *new);
 char		*syntax_analysis(char *line);
+
+/*
+** utils
+** folder utils
+*/
+char			*get_current_dir();
+char			*create_dict_item(void *item);
+t_list			*parse_env(char **env);
+char			*get_dict_val_by_key(char *key);
+void			remove_item_from_list(t_list **root, t_list *del_item);
+void			del_dict_item(void *list);
+char			*get_value_env_item(char *str);
+char			*get_key_env_item(char *str);
+
+/*
+** builtin functions
+** builtin folder
+*/
+void			ft_cd(char **args);
+void			ft_echo(char **argv);
+void			ft_env();
+void 			ft_exit(char **argv);
+void			ft_export(char **argv);
+void			ft_pwd();
+void 			ft_unset(char **argv);
 
 #endif

@@ -32,6 +32,8 @@ int main(int argc, char **argv, char **env)
 	char	*file = "/Users/tredfort/.bash_history";
 	char	*term_name = "xterm-256color";
 
+	sh = (t_sh){0};
+	sh.env_dict = parse_env(env);
 	list = NULL;
 	fd = init_history(file, &list);
 
