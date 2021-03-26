@@ -51,6 +51,7 @@ int		init_history(char *file, t_2list **list)
 	{
 		while (get_next_line(fd, &line) > 0)
 			ft_2lstadd_front(list, ft_2lstnew(line));
+		free(line);
 	}
 	return fd;
 }

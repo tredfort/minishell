@@ -50,35 +50,43 @@ int main(int argc, char **argv, char **env)
 		{
 			len = read(STDIN_FILENO, line, 100);
 			line[len] = '\0';
-			if (!strcmp(line, "\e[C") || !strcmp(line, "\e[D") || !strcmp(line, "\e[D"))
+			if (!strcmp(line, "\e[C") || !strcmp(line, "\e[D"))
 				continue;
+			else if (!strcmp(line, "\4") && !ft_strlen(tmp))
+			{
+				write(1, "exit\n", 5);
+				break;
+			}
 			else if (!strcmp(line, "\e[A"))
 			{
 				tputs(restore_cursor, 1, ft_putchar);
 				tputs(tigetstr("ed"), 1, ft_putchar);
-				write(1, list->content, ft_strlen(list->content));
+				if (list->next)
+					list = list->next;
+				ft_putstr_fd(list->content, STDOUT_FILENO);
 				temp = tmp;
 				tmp = ft_strdup(list->content);
 				free(temp);
-				if (list->next)
-					list = list->next;
 			}
 			else if (!strcmp(line, "\e[B"))
 			{
 				tputs(restore_cursor, 1, ft_putchar);
 				tputs(tigetstr("ed"), 1, ft_putchar);
-				write(1, list->content, ft_strlen(list->content));
+				if (list->prev)
+					list = list->prev;
+				ft_putstr_fd(list->content, STDOUT_FILENO);
 				temp = tmp;
 				tmp = ft_strdup(list->content);
 				free(temp);
-				if (list->prev)
-					list = list->prev;
 			}
 			else if (!strcmp(line, "\177"))
 			{
-				tputs(cursor_left, 1, ft_putchar);
-				tputs(delete_character, 1, ft_putchar);
-				tmp[ft_strlen(tmp) - 1] = '\0';
+				if (ft_strlen(tmp) > 0)
+				{
+					tmp[ft_strlen(tmp) - 1] = '\0';
+					tputs(cursor_left, 1, ft_putchar);
+					tputs(delete_character, 1, ft_putchar);
+				}
 			}
 			else if (!strcmp(line, "\n"))
 			{
@@ -86,8 +94,7 @@ int main(int argc, char **argv, char **env)
 				if (ft_strlen(tmp) > 0)
 				{
 					ft_2lstadd_front(&list, ft_2lstnew(tmp));
-					write(1, tmp, ft_strlen(tmp));
-					write(1, "\n", 1);
+					ft_putendl_fd(tmp, STDOUT_FILENO);
 				}
 				temp = tmp;
 				tmp = ft_strdup("");
@@ -95,12 +102,12 @@ int main(int argc, char **argv, char **env)
 			}
 			else
 			{
-				write(1, line, len);
+				ft_putstr_fd(line, 1);
 				temp = tmp;
 				tmp = ft_strjoin(tmp, line);
 				free(temp);
 			}
-		} while (strcmp(line, "\n") && strcmp(line, "\4"));
+		} while (strcmp(line, "\n"));
 	}
 	return 0;
 }

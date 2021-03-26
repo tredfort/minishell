@@ -14,6 +14,13 @@
 
 void	ft_putendl_fd(char *s, int fd)
 {
-	ft_putstr_fd(s, fd);
-	ft_putchar_fd('\n', fd);
+	char	*str;
+
+	if (s)
+	{
+		str = ft_substr(s, 0, ft_strlen(s) + 1);
+		str[ft_strlen(str)] = '\n';
+		ft_putstr_fd(str, fd);
+		free(str);
+	}
 }
