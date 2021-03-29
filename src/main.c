@@ -100,7 +100,7 @@ int main(int argc, char **argv, char **env)
 				tmp = ft_strdup("");
 				free(temp);
 			}
-			else
+			else if (ft_strlen(line))
 			{
 				ft_putstr_fd(line, 1);
 				temp = tmp;

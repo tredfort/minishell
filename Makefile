@@ -18,9 +18,10 @@ DIR_SRCS = src
 
 DIR_OBJS = objects
 
-SRCS =		main.c \
+SRCS =		main2.c \
 			get_next_line.c \
-			history.c
+			history.c \
+			syntax_analysis.c
 
 #SRCS :=		$(addprefix $(DIR_SRCS), $(SRCS))
 

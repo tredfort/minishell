@@ -14,16 +14,9 @@
 
 void	ft_putnbr_fd(int n, int fd)
 {
-	unsigned int	nb;
+	char	*number;
 
-	if (n < 0)
-	{
-		ft_putchar_fd('-', fd);
-		nb = (unsigned int)(n * -1);
-	}
-	else
-		nb = (unsigned int)n;
-	if (nb > 9)
-		ft_putnbr_fd(nb / 10, fd);
-	ft_putchar_fd(nb % 10 + '0', fd);
+	number = ft_itoa(n);
+	ft_putstr_fd(number, fd);
+	free(number);
 }
