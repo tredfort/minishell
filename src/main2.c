@@ -29,47 +29,30 @@ int main(int argc, char **argv, char **env)
 		error = syntax_analysis(line);
 		if (error)
 			ft_putstr_fd(error, STDIN_FILENO);
-//		{
-//			ft_putstr_fd("minishell: ", STDIN_FILENO);
-//			if (errno == 1)
-//				ft_putstr_fd("syntax error near unexpected token `;;'\n",
-//			STDIN_FILENO);
-//			else if (errno == 2)
-//				ft_putstr_fd("syntax error near unexpected token `)'\n",
-//							 STDIN_FILENO);
-//			else if (errno == 3)
-//				ft_putstr_fd("syntax error near unexpected token `<'\n",
-//							 STDIN_FILENO);
-//			else if (errno == 4)
-//				ft_putstr_fd("syntax error near unexpected token `|'\n",
-//							 STDIN_FILENO);
-//		}
-//		else if (errno < 0)
-//			continue;
-	 	else if (!strncmp(line, "export ", 7))
+	 	else if (!ft_strncmp(line, "export ", 7))
 			ft_export(ft_split(line + 7, ' '));
-		else if (!strncmp(line, "unset ", 6))
+		else if (!ft_strncmp(line, "unset ", 6))
 			ft_unset(ft_split(line + 6, ' '));
-		else if (!strncmp(line, "cd ", 3))
+		else if (!ft_strncmp(line, "cd ", 3))
 			ft_cd(ft_split(line + 3, ' '));
 		else if (!strcmp(line, "pwd"))
 	 		ft_pwd();
 	 	else if (!strcmp(line, "env"))
 	 		ft_env();
-	 	else if (!strncmp(line, "exit ", 5))
+	 	else if (!ft_strncmp(line, "exit ", 5))
 		{
 			ft_exit(ft_split(line + 5, ' '));
 			free(line);
 			return (0);
 		}
-	 	else if (!strncmp(line, "echo ", 5))
+	 	else if (!ft_strncmp(line, "echo ", 5))
 	 		ft_echo(ft_split(line + 5, ' '));
 	 	else if (!strcmp(line, "\e[A"))
 	 		printf("previous\n");
 	 	else if (!strcmp(line, "\e[B"))
 	 		printf("%d\n", printf("\e[B"));
 	 	else
-	 		printf("%s\n", line);
+			print(split_into_commades(line));
 		free(line);
 	}
 }

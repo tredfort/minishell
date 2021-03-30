@@ -39,6 +39,7 @@ int main(int argc, char **argv, char **env)
 
 	tcgetattr(0, &term);
 	term.c_lflag &= ~(ECHO);
+	term.c_lflag &= ~(ISIG);
 	term.c_lflag &= ~(ICANON);
 	tcsetattr(0, TCSANOW, &term);
 	tgetent(0, term_name);
@@ -90,6 +91,11 @@ int main(int argc, char **argv, char **env)
 					tputs(delete_character, 1, ft_putchar);
 				}
 			}
+			else if (!strcmp(line, "\3"))
+			{
+				write(1, "\n", 1);
+				break;
+			}
 			else if (!strcmp(line, "\n"))
 			{
 				write(1, "\n", 1);
@@ -102,7 +108,7 @@ int main(int argc, char **argv, char **env)
 				tmp = ft_strdup("");
 				free(temp);
 			}
-			else if (ft_strlen(line))
+			else if (ft_strncmp(line, "\4", 1))
 			{
 				ft_putstr_fd(line, 1);
 				temp = tmp;

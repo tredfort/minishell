@@ -37,7 +37,8 @@ SRCS =		main2.c \
 			utils/remove_item_from_list.c \
 			utils/create_dict_item.c \
 			utils/env_item.c \
-			syntax_analysis.c
+			syntax_analysis.c \
+			utils/utils.c
 
 #SRCS :=		$(addprefix $(DIR_SRCS), $(SRCS))
 
