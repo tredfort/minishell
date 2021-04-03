@@ -22,24 +22,27 @@ DIR_OBJS = objects
 
 SRCS =		main.c \
 			get_next_line.c \
+			syntax_analysis.c \
+			ft_exec.c \
 			command_call_history.c \
 			lexer.c \
             parser.c \
-            string_formatting.c
-#			builtin/ft_cd.c \
-#			builtin/ft_echo.c \
-#			builtin/ft_env.c \
-#			builtin/ft_exit.c \
-#			builtin/ft_export.c \
-#			builtin/ft_pwd.c \
-#			builtin/ft_unset.c \
-#			utils/get_current_dir.c \
-#			utils/parse_env.c \
-#			utils/get_home_from_env.c \
-#			utils/del_list_item.c \
-#			utils/remove_item_from_list.c \
-#			utils/create_dict_item.c \
-#			utils/env_item.c \
+            string_formatting.c \
+			builtin/ft_cd.c \
+			builtin/ft_echo.c \
+			builtin/ft_env.c \
+			builtin/ft_exit.c \
+			builtin/ft_export.c \
+			builtin/ft_pwd.c \
+			builtin/ft_unset.c \
+			utils/get_current_dir.c \
+			utils/parse_env.c \
+			utils/get_home_from_env.c \
+			utils/del_list_item.c \
+			utils/remove_item_from_array.c \
+			utils/env_item.c \
+			utils/ft_strerror_fd.c \
+			utils/ft_strarr_size.c
 
 #SRCS :=		$(addprefix $(DIR_SRCS), $(SRCS))
 
@@ -47,6 +50,7 @@ OBJS = $(addprefix $(DIR_OBJS)/, $(SRCS:.c=.o))
 
 CC = gcc
 
+#TODO: remove before completion
 LINUX_LIB = #-lncurses
 
 FLAGS = #-Wall -Wextra -Werror

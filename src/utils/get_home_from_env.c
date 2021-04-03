@@ -1,17 +1,17 @@
 #include "../../includes/minishell.h"
 
-char *get_dict_val_by_key(char *key)
+char *get_dict_val_by_key(char *key, char **envp)
 {
-	t_list *t;
-	t_item *i;
+	char	**t;
+	char	*item_key;
 
-	t = sh.env_dict;
+	t = envp;
 	while (t)
 	{
-		i = t->content;
-		if (!strcmp(i->key, key))
-			return(i->value);
-		t = t->next;
+		item_key = get_key_env_item(*t);
+		if (!strcmp(item_key, key))
+			return(get_value_env_item(*t));
+		++t;
 	}
 	return (0);
 }

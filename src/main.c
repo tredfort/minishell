@@ -22,11 +22,13 @@ int	main(int argc, char **argv, char **env)
 	char	*line;
 	char	**envp;
 	t_list	*lst;
+	t_sh	*temp;
 
 	(void)argc;
 	(void)argv;
 //	init_envp(env, &envp);
-	while (env)
+	envp = parse_env(env);
+	while (envp)
 	{
 		prompt();
 //		get_next_command(env, &line);
@@ -34,7 +36,13 @@ int	main(int argc, char **argv, char **env)
 		if (!lexer(line))
 		{
 			parser(line, &lst);
-			string_formatting(lst, env);
+			string_formatting(lst, envp);
+			temp = lst->content;
+			if (temp->argv)
+			{
+				printf("tmp = %s\n", temp->argv[0]);
+				ft_exec(temp->argv[0], temp->argv, &envp);
+			}
 			print(lst);
 //			executor(lst, env);
 			ft_lstclear(&lst, free);

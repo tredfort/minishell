@@ -28,6 +28,7 @@
 # define ERROR_MSG13 "minishell: syntax error near unexpected token `\\'\n"
 # include "../libft/libft.h"
 # include <unistd.h>
+//TODO::remove it before mark as completed
 # include <stdio.h>
 # include <unistd.h>
 # include <string.h>
@@ -35,6 +36,9 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <term.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
+# include <sys/errno.h>
 # define SHELL_BUFFER 4097
 
 typedef struct	s_sh
@@ -61,6 +65,7 @@ void		parser(char *line, t_list **lst);
 void		string_formatting(t_list *lst, char **env);
 void		print(t_list *lst);
 void		string_formatting(t_list *lst, char **env);
+void		ft_exec(char *cmd, char **argv, char ***envp);
 
 /*
 ** utils
@@ -68,23 +73,25 @@ void		string_formatting(t_list *lst, char **env);
 */
 char			*get_current_dir();
 char			*create_dict_item(void *item);
-t_list			*parse_env(char **env);
-char			*get_dict_val_by_key(char *key);
-void			remove_item_from_list(t_list **root, t_list *del_item);
+char			**parse_env(char **env);
+char			*get_dict_val_by_key(char *key, char **envp);
+void			remove_item_from_array(char ***root, char *del_item);
 void			del_dict_item(void *list);
 char			*get_value_env_item(char *str);
 char			*get_key_env_item(char *str);
+size_t			ft_strarr_size(char **str_arr);
+void			ft_strerror_fd(char *str_error, char *cmd, int fd);
 
 /*
 ** builtin functions
 ** builtin folder
 */
-void			ft_cd(char **args);
+void			ft_cd(char **argv, char **envp);
 void			ft_echo(char **argv);
-void			ft_env();
+void			ft_env(char **argv, char **envp);
 void 			ft_exit(char **argv);
-void			ft_export(char **argv);
+void			ft_export(char **argv, char ***envp);
 void			ft_pwd();
-void 			ft_unset(char **argv);
+void 			ft_unset(char **argv, char ***envp);
 
 #endif

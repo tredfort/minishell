@@ -1,13 +1,18 @@
 #include "../../includes/minishell.h"
 
-void 	print_list_item(void *content)
-{
-	ft_putstr_fd(content, 1);
-	ft_putchar_fd('\n', 1);
-}
-
 void
-	ft_env()
+	ft_env(char **argv, char **envp)
 {
-	ft_lstiter(sh.env_dict, &print_list_item);
+	char	**t;
+
+	//TODO: env somehow work with env
+	(void)argv;
+	t = envp;
+	while (t && *t)
+	{
+		//TODO:: don't show var with empty value
+		ft_putstr_fd(*t, 1);
+		ft_putchar_fd('\n', 1);
+		++t;
+	}
 }
