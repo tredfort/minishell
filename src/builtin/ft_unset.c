@@ -3,17 +3,18 @@
 void
 	unset_var(char *var)
 {
-	t_list	*t;
+	char	**t;
+	char	*key;
 
-	t = sh.env_dict;
+	t = sh.env;
 	while (t)
 	{
-		if(!strncmp(t->content, var, ft_strlen(var)))
+		if(!strncmp(*t, var, ft_strlen(var)))
 		{
-			remove_item_from_list(&sh.env_dict, t);
+			remove_item_from_array(&sh.env, var);
 			break ;
 		}
-		t = t->next;
+		++t;
 	}
 }
 

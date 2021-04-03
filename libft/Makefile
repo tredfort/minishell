@@ -27,7 +27,7 @@ INCLUDES = ./
 all: $(NAME)
 
 %.o: %.c libft.h
-	gcc $(FLAGS) -I$(INCLUDES) $< -o $@
+	gcc $(FLAGS) -I $(INCLUDES) $< -o $@
 
 $(NAME): $(OBJECTS) $(BONUS_OBJECTS)
 	ar rcs $@ $(OBJECTS) $(BONUS_OBJECTS)

@@ -10,7 +10,8 @@ void
 	ft_cd(char **argv)
 {
 	//TODO:: here we should print the error description
-	if ((!argv && chdir(get_dict_val_by_key("HOME")) == -1) || (argv && argv[0] && chdir(argv[0]) == -1))
+	if ((!argv && chdir(get_dict_val_by_key("HOME")) == -1)
+		|| (argv && argv[0] && chdir(argv[0]) == -1))
 		ft_putstr_fd(ft_itoa(errno), 1);
 	//else
 	//	ft_putchar_fd('\n', 1);
