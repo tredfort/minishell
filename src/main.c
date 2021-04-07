@@ -55,10 +55,15 @@ int main(int argc, char **argv, char **env)
 			line[len] = '\0';
 			if (!strcmp(line, "\e[C") || !strcmp(line, "\e[D"))
 				continue;
-			else if (!strcmp(line, "\4") && !ft_strlen(tmp))
+			else if (!strcmp(line, "\4"))
 			{
-				write(1, "exit\n", 5);
-				break;
+				if (!ft_strlen(tmp))
+				{
+					write(1, "exit\n", 5);
+					break;
+				}
+				else
+					write(1, "\a", 1);
 			}
 			else if (!strcmp(line, "\e[A"))
 			{
@@ -108,7 +113,7 @@ int main(int argc, char **argv, char **env)
 				tmp = ft_strdup("");
 				free(temp);
 			}
-			else if (ft_strncmp(line, "\4", 1))
+			else
 			{
 				ft_putstr_fd(line, 1);
 				temp = tmp;
