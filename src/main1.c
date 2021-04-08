@@ -6,71 +6,121 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/14 19:15:13 by tredfort          #+#    #+#             */
-/*   Updated: 2021/03/16 21:55:40 by smephest         ###   ########.fr       */
+/*   Updated: 2021/03/23 19:43:18 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include <stdio.h>
+#include <term.h>
+#include <curses.h>
+#define BUFFER_SIZE 1000
 
-//t_2list	*ft_2lstnew(void *content)
-//{
-//	t_2list	*new;
-//
-//	new = (t_2list *)malloc(sizeof(t_2list));
-//	if (!new)
-//		return NULL;
-//	new->content = content;
-//	new->next = NULL;
-//	new->prev = NULL;
-//	return (new);
-//}
-//
-//void	ft_2lstadd_front(t_2list **lst, t_2list *new)
-//{
-//	t_2list	*tmp;
-//
-//	if (new)
-//	{
-//		new->next = *lst;
-//		if (*lst)
-//		{
-//			tmp = *lst;
-//			tmp->prev = new;
-//		}
-//		*lst = new;
-//	}
-//}
-//
-//int		init_history(char *file, t_2list **list)
-//{
-//	char	*line;
-//	int		fd;
-//
-//	fd = open(file, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
-//	if (fd > 0)
-//	{
-//		while (get_next_line(fd, &line) > 0)
-//			ft_2lstadd_front(list, ft_2lstnew(line));
-//	}
-//	return fd;
-//}
-
-#include <stdio.h>
-
-char	*hello(int i)
+int		ft_putchar(int c)
 {
-	if (i)
-		return (0);
-	return ("Hello");
+	return (write(1, &c, 1));
 }
 
-int main(int argc, char **argv)
+int main(int argc, char **argv, char **env)
 {
-	char	*s;
+	char	line[BUFFER_SIZE];
+	char	*tmp;
+	char	*temp;
+	int 	len;
+	int		fd;
+	struct	termios term;
+	t_2list	*list;
+	char	*file = "/Users/tredfort/.bash_history";
+	char	*term_name = "xterm-256color";
 
-	s = hello(0);
-	if (s)
-		printf("%s\n", s);
+	sh = (t_sh){0};
+	sh.env_dict = parse_env(env);
+	list = NULL;
+	fd = init_history(file, &list);
+
+	tcgetattr(0, &term);
+	term.c_lflag &= ~(ECHO);
+	term.c_lflag &= ~(ISIG);
+	term.c_lflag &= ~(ICANON);
+	tcsetattr(0, TCSANOW, &term);
+	tgetent(0, term_name);
+	tmp = ft_strdup("");
+//	ft_2lstadd_front(&list, ft_2lstnew(tmp));
+	while (strcmp(line, "\4"))
+	{
+		write(STDIN_FILENO, "minishell> ", 11);
+		tputs(save_cursor, 1, ft_putchar);
+		do
+		{
+			len = read(STDIN_FILENO, line, 100);
+			line[len] = '\0';
+			if (!strcmp(line, "\e[C") || !strcmp(line, "\e[D"))
+				continue;
+			else if (!strcmp(line, "\4"))
+			{
+				if (!ft_strlen(tmp))
+				{
+					write(1, "exit\n", 5);
+					break;
+				}
+				else
+					write(1, "\a", 1);
+			}
+			else if (!strcmp(line, "\e[A"))
+			{
+				tputs(restore_cursor, 1, ft_putchar);
+				tputs(tigetstr("ed"), 1, ft_putchar);
+				if (list->next)
+					list = list->next;
+				ft_putstr_fd(list->content, STDOUT_FILENO);
+				temp = tmp;
+				tmp = ft_strdup(list->content);
+				free(temp);
+			}
+			else if (!strcmp(line, "\e[B"))
+			{
+				tputs(restore_cursor, 1, ft_putchar);
+				tputs(tigetstr("ed"), 1, ft_putchar);
+				if (list->prev)
+					list = list->prev;
+				ft_putstr_fd(list->content, STDOUT_FILENO);
+				temp = tmp;
+				tmp = ft_strdup(list->content);
+				free(temp);
+			}
+			else if (!strcmp(line, "\177"))
+			{
+				if (ft_strlen(tmp) > 0)
+				{
+					tmp[ft_strlen(tmp) - 1] = '\0';
+					tputs(cursor_left, 1, ft_putchar);
+					tputs(delete_character, 1, ft_putchar);
+				}
+			}
+			else if (!strcmp(line, "\3"))
+			{
+				write(1, "\n", 1);
+				break;
+			}
+			else if (!strcmp(line, "\n"))
+			{
+				write(1, "\n", 1);
+				if (ft_strlen(tmp) > 0)
+				{
+					ft_2lstadd_front(&list, ft_2lstnew(tmp));
+					ft_putendl_fd(tmp, STDOUT_FILENO);
+				}
+				temp = tmp;
+				tmp = ft_strdup("");
+				free(temp);
+			}
+			else
+			{
+				ft_putstr_fd(line, 1);
+				temp = tmp;
+				tmp = ft_strjoin(tmp, line);
+				free(temp);
+			}
+		} while (strcmp(line, "\n"));
+	}
 	return 0;
 }

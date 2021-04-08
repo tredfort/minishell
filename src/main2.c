@@ -21,14 +21,13 @@ int main(int argc, char **argv, char **env)
 	char	*error;
 
 	sh = (t_sh){0};
-	sh.env_dict = parse_env(env);
+//	sh.env_dict = parse_env(env);
 	while (1)
 	{
 		ft_putstr_fd("minishell> ", STDIN_FILENO);
 		get_next_line(STDIN_FILENO, &line);
-		error = syntax_analysis(line);
-		if (error)
-			ft_putstr_fd(error, STDIN_FILENO);
+		if (lexer(line))
+			continue;
 	 	else if (!ft_strncmp(line, "export ", 7))
 			ft_export(ft_split(line + 7, ' '));
 		else if (!ft_strncmp(line, "unset ", 6))
