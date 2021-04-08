@@ -6,7 +6,7 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 06:00:58 by tredfort          #+#    #+#             */
-/*   Updated: 2021/04/08 08:26:10 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/08 23:29:40 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ static void	is_sintax_error(char *line, char **error, int *i)
 		*error = ERROR_MSG3;
 	else if (line[*i] == ')')
 		*error = ERROR_MSG4;
-	else if ((line[*i] == '>' && after_space(line + *i + 1) == '<') ||
-		(line[*i] == '<' && after_space(line + *i + 2) == '<'))
+	else if ((line[*i] == '>' && after_space(line + *i + 1) == '<')
+		|| (line[*i] == '<' && after_space(line + *i + 2) == '<'))
 		*error = ERROR_MSG10;
-	else if ((line[*i] == '<' && after_space(line + *i + 1) == '>') ||
-		(line[*i] == '>' && after_space(line + *i + 2) == '>'))
+	else if ((line[*i] == '<' && after_space(line + *i + 1) == '>')
+		|| (line[*i] == '>' && after_space(line + *i + 2) == '>'))
 		*error = ERROR_MSG11;
 }
 
@@ -65,24 +65,24 @@ static void	is_sintax_error2(char *line, char prev, char **error)
 {
 	if (!*error && *line == ';' && ft_strchr("<>|", prev))
 		*error = ERROR_MSG5;
-	else if (!ft_strncmp(line, "||", 2) && (ft_strchr("<>;", prev) ||
-		!after_space(line + 2)))
+	else if (!ft_strncmp(line, "||", 2) && (ft_strchr("<>;", prev)
+			|| !after_space(line + 2)))
 		*error = ERROR_MSG2;
-	else if (*line == '|' && (ft_strchr("<>;", prev) ||
-		!after_space(line + 1)))
+	else if (*line == '|' && (ft_strchr("<>;", prev)
+			|| !after_space(line + 1)))
 		*error = ERROR_MSG1;
 	else if (!ft_strncmp(line, "<<", 2))
 		*error = ERROR_MSG12;
-	else if ((*line == '<' || *line == '>') &&
-		!after_space(line + 1))
+	else if ((*line == '<' || *line == '>')
+		&& !after_space(line + 1))
 		*error = ERROR_MSG9;
 }
 
-int		lexer(char *line)
+int	lexer(char *line)
 {
 	char	*error;
 	char	prev;
-	int 	i;
+	int		i;
 
 	i = 0;
 	prev = 0;
