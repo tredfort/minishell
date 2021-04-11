@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#define SPLITTER (-1)
 
 void	print(t_list *lst)
 {
@@ -21,7 +22,7 @@ void	print(t_list *lst)
 	while (lst)
 	{
 		cmd = lst->content;
-		if (cmd->argv && cmd->argv[0])
+		if (cmd->argv[0])
 		{
 			printf("cmd: %s\n", cmd->argv[0]);
 			free(cmd->argv[0]);
@@ -32,8 +33,8 @@ void	print(t_list *lst)
 				free(cmd->argv[i]);
 				i++;
 			}
-			free(cmd->argv);
 		}
+		free(cmd->argv);
 		if (cmd->pipe)
 			printf("pipe: yes\n");
 		else
@@ -49,6 +50,29 @@ void	print(t_list *lst)
 	}
 }
 
+void	remove_shielding(char **str)
+{
+	int		i;
+	char	*ptr;
+
+	i = 0;
+	while ((*str)[i])
+	{
+		if ((*str)[i] == '\"')
+			(*str)[i - 1] = SPLITTER;
+		if ((*str)[i] == '\'')
+		{
+			ptr = *str;
+			skip_quotes(*str, &i);
+			*ptr = SPLITTER;
+			(*str)[i - 1] = SPLITTER;
+		}
+		if ((*str)[i] == '\\' && i++)
+			(*str)[i - 1] = SPLITTER;
+		i++;
+	}
+}
+
 int	get_key(char *str, char **key, int *start)
 {
 	int		i;
@@ -59,12 +83,14 @@ int	get_key(char *str, char **key, int *start)
 	{
 		if (str[i] == '\\' && str[i + 1] == '$')
 			i += 2;
-		if (str[i++] == '$')
+		if (str[i] == '$')
 		{
+			i++;
 			*start = i;
 			while (str[i] && ft_isalnum(str[i]))
 				i++;
 			*key = ft_substr(str, *start, i - *start);
+			break;
 		}
 		i++;
 	}
@@ -109,7 +135,6 @@ void	string_formatting(t_list *lst, char **env)
 {
 	t_sh	*cmd;
 	t_list	*rd;
-	char	*str;
 	int		i;
 
 	while (lst)
@@ -117,11 +142,15 @@ void	string_formatting(t_list *lst, char **env)
 		cmd = lst->content;
 		i = 0;
 		while (cmd->argv[i])
-			swap_key_to_value(&cmd->argv[i++], env);
+		{
+			swap_key_to_value(&cmd->argv[i], env);
+			remove_shielding(&cmd->argv[i++]);
+		}
 		rd = cmd->redir;
 		while (rd)
 		{
 			swap_key_to_value((char **)&rd->content, env);
+			remove_shielding((char **)&rd->content);
 			rd = rd->next;
 		}
 		lst = lst->next;

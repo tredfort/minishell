@@ -51,8 +51,6 @@ typedef struct	s_2list
 	void		*next;
 } 				t_2list;
 
-t_sh			sh;
-
 int			get_next_line(int fd, char **line);
 int			init_history(char *file, t_2list **list);
 t_2list		*ft_2lstnew(void *content);

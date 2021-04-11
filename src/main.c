@@ -20,10 +20,12 @@ static void	prompt(void)
 int	main(int argc, char **argv, char **env)
 {
 	char	*line;
+	char	**envp;
 	t_list	*lst;
 
 	(void)argc;
 	(void)argv;
+//	init_envp(env, &envp);
 	while (env)
 	{
 		prompt();
