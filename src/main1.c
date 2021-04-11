@@ -33,7 +33,7 @@ int main(int argc, char **argv, char **env)
 	char	*term_name = "xterm-256color";
 
 	sh = (t_sh){0};
-	sh.env_dict = parse_env(env);
+//	sh.env_dict = parse_env(env);
 	list = NULL;
 	fd = init_history(file, &list);
 
@@ -89,11 +89,14 @@ int main(int argc, char **argv, char **env)
 			}
 			else if (!strcmp(line, "\177"))
 			{
-				if (ft_strlen(tmp) > 0)
+				int len_tmp = ft_strlen(tmp);
+				if (len_tmp > 0)
 				{
-					tmp[ft_strlen(tmp) - 1] = '\0';
+					if (tmp[len_tmp - 1] < 0)
+						len_tmp -= 1;
+					tmp[len_tmp - 1] = '\0';
 					tputs(cursor_left, 1, ft_putchar);
-					tputs(delete_character, 1, ft_putchar);
+					tputs(tigetstr("ed"), 1, ft_putchar);
 				}
 			}
 			else if (!strcmp(line, "\3"))

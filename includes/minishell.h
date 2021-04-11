@@ -26,9 +26,6 @@
 # define ERROR_MSG11 "minishell: syntax error near unexpected token `>'\n"
 # define ERROR_MSG12 "minishell: syntax error near unexpected token `<<'\n"
 # define ERROR_MSG13 "minishell: syntax error near unexpected token `\\'\n"
-# define PUT 1
-# define ADD 2
-# define TAKE 3
 # include "../libft/libft.h"
 # include <unistd.h>
 # include <stdio.h>
@@ -40,33 +37,12 @@
 # include <term.h>
 # define SHELL_BUFFER 4097
 
-typedef struct	s_item
-{
-	char		*key;
-	char 		*value;
-}				t_item;
-
-typedef struct	s_redir
-{
-	int			action;
-	char		*file;
-}				t_redir;
-
 typedef struct	s_sh
 {
-	char		*cmd;
 	char		**argv;
-	char		**envp;
 	int			pipe;
 	t_list		*redir;
-	t_list		*env_dict;
 }				t_sh;
-
-typedef struct	s_s
-{
-	char		**envp;
-	t_list		*lst;
-}				t_s;
 
 typedef struct	s_2list
 {
@@ -81,10 +57,12 @@ int			get_next_line(int fd, char **line);
 int			init_history(char *file, t_2list **list);
 t_2list		*ft_2lstnew(void *content);
 void		ft_2lstadd_front(t_2list **lst, t_2list *new);
-char		*syntax_analysis(char *line);
-char		skip_quotes(char *s, int *i);
-t_list		*split_into_commades(char *line);
+char		skip_quotes(char *line, int *i);
+int			lexer(char *line);
+void		parser(char *line, t_list **lst);
+void		string_formatting(t_list *lst, char **env);
 void		print(t_list *lst);
+void		string_formatting(t_list *lst, char **env);
 
 /*
 ** utils
@@ -98,9 +76,6 @@ void			remove_item_from_list(t_list **root, t_list *del_item);
 void			del_dict_item(void *list);
 char			*get_value_env_item(char *str);
 char			*get_key_env_item(char *str);
-
-
-char			after_space(char *str);
 
 /*
 ** builtin functions

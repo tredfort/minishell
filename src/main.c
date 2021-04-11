@@ -32,6 +32,7 @@ int	main(int argc, char **argv, char **env)
 		if (!lexer(line))
 		{
 			parser(line, &lst);
+			string_formatting(lst, env);
 			print(lst);
 //			executor(lst, env);
 			ft_lstclear(&lst, free);

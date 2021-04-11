@@ -20,25 +20,26 @@ DIR_SRCS = src
 
 DIR_OBJS = objects
 
-SRCS =		main2.c \
+SRCS =		main.c \
 			get_next_line.c \
-			history.c \
-			builtin/ft_cd.c \
-			builtin/ft_echo.c \
-			builtin/ft_env.c \
-			builtin/ft_exit.c \
-			builtin/ft_export.c \
-			builtin/ft_pwd.c \
-			builtin/ft_unset.c \
-			utils/get_current_dir.c \
-			utils/parse_env.c \
-			utils/get_home_from_env.c \
-			utils/del_list_item.c \
-			utils/remove_item_from_list.c \
-			utils/create_dict_item.c \
-			utils/env_item.c \
-			syntax_analysis.c \
-			utils/utils.c
+			command_call_history.c \
+			lexer.c \
+            parser.c \
+            string_formatting.c
+#			builtin/ft_cd.c \
+#			builtin/ft_echo.c \
+#			builtin/ft_env.c \
+#			builtin/ft_exit.c \
+#			builtin/ft_export.c \
+#			builtin/ft_pwd.c \
+#			builtin/ft_unset.c \
+#			utils/get_current_dir.c \
+#			utils/parse_env.c \
+#			utils/get_home_from_env.c \
+#			utils/del_list_item.c \
+#			utils/remove_item_from_list.c \
+#			utils/create_dict_item.c \
+#			utils/env_item.c \
 
 #SRCS :=		$(addprefix $(DIR_SRCS), $(SRCS))
 

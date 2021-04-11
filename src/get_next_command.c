@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   get_next_command.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/01 18:42:56 by tredfort          #+#    #+#             */
-/*   Updated: 2021/04/01 18:43:02 by tredfort         ###   ########.fr       */
+/*   Created: 2021/04/08 05:55:59 by tredfort          #+#    #+#             */
+/*   Updated: 2021/04/08 05:56:08 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../includes/minishell.h"
 
-void	prompt(void)
+void	get_next_command(char **env, char **line)
 {
-	ft_putstr_fd("minishell> ", STDIN_FILENO);
-}
 
-char	after_space(char *str)
-{
-	while (*str && *str == ' ')
-		str++;
-	return (*str);
 }
