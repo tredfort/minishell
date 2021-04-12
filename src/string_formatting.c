@@ -59,10 +59,10 @@ void	remove_shielding(char **str)
 	while ((*str)[i])
 	{
 		if ((*str)[i] == '\"')
-			(*str)[i - 1] = SPLITTER;
+			(*str)[i] = SPLITTER;
 		if ((*str)[i] == '\'')
 		{
-			ptr = *str;
+			ptr = *str + i;
 			skip_quotes(*str, &i);
 			*ptr = SPLITTER;
 			(*str)[i - 1] = SPLITTER;
@@ -71,6 +71,18 @@ void	remove_shielding(char **str)
 			(*str)[i - 1] = SPLITTER;
 		i++;
 	}
+	i = 0;
+	int j = 0;
+	ptr = *str;
+	*str = ft_calloc(ft_strlen(ptr), sizeof(char));
+	while (ptr[i])
+	{
+		if (ptr[i] != SPLITTER)
+			(*str)[j++] = ptr[i];
+		i++;
+	}
+	(*str)[j] = '\0';
+	free(ptr);
 }
 
 int	get_key(char *str, char **key, int *start)
@@ -83,7 +95,9 @@ int	get_key(char *str, char **key, int *start)
 	{
 		if (str[i] == '\\' && str[i + 1] == '$')
 			i += 2;
-		if (str[i] == '$')
+		if (str[i] == '\'')
+			skip_quotes(str, &i);
+		if (str[i] == '$' && str[i + 1] != '$')
 		{
 			i++;
 			*start = i;
