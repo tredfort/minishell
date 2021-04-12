@@ -22,12 +22,12 @@ DIR_OBJS = objects
 
 SRCS =		main.c \
 			get_next_line.c \
-			syntax_analysis.c \
 			ft_exec.c \
 			command_call_history.c \
 			lexer.c \
             parser.c \
             string_formatting.c \
+            print.c \
 			builtin/ft_cd.c \
 			builtin/ft_echo.c \
 			builtin/ft_env.c \

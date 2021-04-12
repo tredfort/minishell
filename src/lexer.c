@@ -23,13 +23,15 @@ char	skip_quotes(char *line, int *i)
 {
 	char	quote;
 
-	quote = line[*i];
-	while (line[++(*i)] && quote)
+	quote = line[(*i)++];
+	while (line[(*i)] && quote)
 	{
-		if (line[*i] == '\\' && line[*i + 1] == '"')
-			*i += 2;
 		if ((line[*i] == '"' || line[*i] == '\'') && line[*i] == quote)
 			quote = 0;
+		if (line[*i] == '\\' && ft_strchr("\"|\\<>$; ", line[*i + 1]))
+			*i += 2;
+		else
+			(*i)++;
 	}
 	return (quote);
 }
@@ -68,7 +70,7 @@ static void	is_sintax_error2(char *line, char prev, char **error)
 	else if (!ft_strncmp(line, "||", 2) && (ft_strchr("<>;", prev)
 			|| !after_space(line + 2)))
 		*error = ERROR_MSG2;
-	else if (*line == '|' && (ft_strchr("<>;", prev)
+	else if (*line == '|' && (ft_strchr("<>|;", prev)
 			|| !after_space(line + 1)))
 		*error = ERROR_MSG1;
 	else if (!ft_strncmp(line, "<<", 2))

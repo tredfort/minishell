@@ -6,86 +6,41 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 23:23:08 by tredfort          #+#    #+#             */
-/*   Updated: 2021/04/10 23:23:10 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/13 00:46:59 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#define SPLITTER (-1)
 
-void	print(t_list *lst)
+static void	remove_shielding(char **str)
 {
-	t_list	*tmp;
-	t_sh	*cmd;
+	char	*tmp;
 	int		i;
+	int		j;
 
-	while (lst)
+	tmp = *str;
+	*str = malloc(ft_strlen(tmp));
+	if (!*str)
+		return ;
+	i = 0;
+	j = 0;
+	while (tmp[i])
 	{
-		cmd = lst->content;
-		if (cmd->argv[0])
+		if (tmp[i] == '"' || tmp[i] == '\\')
+			i++;
+		else if (tmp[i] == '\'' && ++i)
 		{
-			printf("cmd: %s\n", cmd->argv[0]);
-			free(cmd->argv[0]);
-			i = 1;
-			while (cmd->argv[i])
-			{
-				printf("argv%d: %s\n", i, cmd->argv[i]);
-				free(cmd->argv[i]);
-				i++;
-			}
+			while (tmp[i] && tmp[i] != '\'')
+				(*str)[j++] = tmp[i++];
 		}
-		free(cmd->argv);
-		if (cmd->pipe)
-			printf("pipe: yes\n");
 		else
-			printf("pipe: no\n");
-		tmp = cmd->redir;
-		while (tmp)
-		{
-			printf("%s\n", (char *)tmp->content);
-			tmp = tmp->next;
-		}
-		ft_lstclear(&cmd->redir, free);
-		lst = lst->next;
-	}
-}
-
-void	remove_shielding(char **str)
-{
-	int		i;
-	char	*ptr;
-
-	i = 0;
-	while ((*str)[i])
-	{
-		if ((*str)[i] == '\"')
-			(*str)[i] = SPLITTER;
-		if ((*str)[i] == '\'')
-		{
-			ptr = *str + i;
-			skip_quotes(*str, &i);
-			*ptr = SPLITTER;
-			(*str)[i - 1] = SPLITTER;
-		}
-		if ((*str)[i] == '\\' && i++)
-			(*str)[i - 1] = SPLITTER;
-		i++;
-	}
-	i = 0;
-	int j = 0;
-	ptr = *str;
-	*str = ft_calloc(ft_strlen(ptr), sizeof(char));
-	while (ptr[i])
-	{
-		if (ptr[i] != SPLITTER)
-			(*str)[j++] = ptr[i];
-		i++;
+			(*str)[j++] = tmp[i++];
 	}
 	(*str)[j] = '\0';
-	free(ptr);
+	free(tmp);
 }
 
-int	get_key(char *str, char **key, int *start)
+static int	get_key(char *str, char **key, int *start)
 {
 	int		i;
 
@@ -97,23 +52,38 @@ int	get_key(char *str, char **key, int *start)
 			i += 2;
 		if (str[i] == '\'')
 			skip_quotes(str, &i);
-		if (str[i] == '$' && str[i + 1] != '$')
+		if (str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1])
+				|| str[i + 1] == '\'' || str[i + 1] == '"'))
 		{
-			i++;
-			*start = i;
+			*start = ++i;
 			while (str[i] && ft_isalnum(str[i]))
 				i++;
 			*key = ft_substr(str, *start, i - *start);
-			break;
+			break ;
 		}
 		i++;
 	}
 	if (*key)
 		return (1);
-	return 0;
+	return (0);
 }
 
-void	swap_key_to_value(char **str, char **env)
+static void	set_value(char **str, char *value, int key_len, int start)
+{
+	char	*tmp;
+
+	tmp = *str;
+	*str = ft_calloc(ft_strlen(tmp) + ft_strlen(value)
+			- key_len * 2 - 1, 1);
+	if (!*str)
+		return ;
+	ft_memcpy(*str, tmp, start - 1);
+	ft_strcpy(*str + start - 1, value + key_len + 1);
+	ft_strcpy(*str + ft_strlen(*str), tmp + start + key_len);
+	free(tmp);
+}
+
+static void	swap_key_to_value(char **str, char **env)
 {
 	char	*key;
 	int		i;
@@ -128,14 +98,8 @@ void	swap_key_to_value(char **str, char **env)
 		{
 			if (!ft_strncmp(env[i], key, key_len) && env[i][key_len] == '=')
 			{
-				char *tmp = *str;
-				*str = ft_calloc(ft_strlen(tmp) + ft_strlen(env[i])
-						- key_len * 2 - 1, 1);
-				ft_memcpy(*str, tmp, start - 1);
-				ft_strcpy(*str + start - 1, env[i] + key_len + 1);
-				ft_strcpy(*str + ft_strlen(*str), tmp + start + key_len);
-				free(tmp);
-				break;
+				set_value(str, env[i], key_len, start);
+				break ;
 			}
 			i++;
 		}

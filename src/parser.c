@@ -97,9 +97,11 @@ void	parser(char *line, t_list **lst)
 	*lst = NULL;
 	while (line[i])
 	{
+		if (line[i] == '\\' && ft_strchr("'\"|\\<>$; ", line[i + 1]))
+			i += 2;
 		if (line[i] == '"' || line[i] == '\'')
 			skip_quotes(line, &i);
-		if (line[i] == ';' || line[i] == '|' || !line[i + 1])
+		if (!line[i] || line[i] == ';' || line[i] == '|' || !line[i + 1])
 		{
 			if (line[i] == ';' || !line[i + 1])
 				cmd = add_new_command(line + start, i - start, 0);
@@ -108,9 +110,7 @@ void	parser(char *line, t_list **lst)
 			ft_lstadd_back(lst, ft_lstnew(cmd));
 			start = i + 1;
 		}
-		if (line[i] == '\\' && ft_strchr("'\"|\\<>$; ", line[i + 1]))
-			i += 2;
-		else if (line[i] && !ft_strchr("'\"", line[i]))
+		if (line[i] && !ft_strchr("'\"", line[i]))
 			i++;
 	}
 }
