@@ -30,19 +30,18 @@ char
 }
 
 static void
-	add_variables(char **argv)
+	add_variables(char **argv, char ***envp)
 {
 	size_t	size;
 	char	**new_argv;
 	size_t	i;
-	size_t	j;
 
-	size = ft_strarr_size(argv) + ft_strarr_size(sh.env);
+	size = ft_strarr_size(argv) + ft_strarr_size(*envp);
 	new_argv = ft_calloc(size + 1, sizeof(char*));
 	i = 0;
-	while (sh.env && sh.env[i])
+	while (*envp && (*envp)[i])
 	{
-		new_argv[i] = ft_strdup(sh.env[i]);
+		new_argv[i] = ft_strdup((*envp)[i]);
 		++i;
 	}
 	while (argv && *argv)
@@ -51,11 +50,14 @@ static void
 		++argv;
 		++i;
 	}
-	sh.env = new_argv;
+	//TODO:: do we need free all str inside of array?
+	free(*envp);
+	//TODO::check if added var on first place
+	*envp = new_argv;
 }
 
 void
-	ft_export(char **argv)
+	ft_export(char **argv, char ***envp)
 {
 	char	**sorted_list;
 	char	**t;
@@ -64,7 +66,7 @@ void
 
 	if (!argv || !*argv)
 	{
-		sorted_list = sort_argv(sh.env);
+		sorted_list = sort_argv(*envp);
 		t = sorted_list;
 		while (t && *t)
 		{
@@ -87,5 +89,5 @@ void
 		free(sorted_list);
 	}
 	else
-		add_variables(argv);
+		add_variables(argv, envp);
 }

@@ -43,7 +43,6 @@
 
 typedef struct	s_sh
 {
-	char		**env;
 	char		**argv;
 	int			pipe;
 	t_list		*redir;
@@ -66,7 +65,7 @@ void		parser(char *line, t_list **lst);
 void		string_formatting(t_list *lst, char **env);
 void		print(t_list *lst);
 void		string_formatting(t_list *lst, char **env);
-void		ft_exec(char *cmd, char **argv);
+void		ft_exec(char *cmd, char **argv, char ***envp);
 
 /*
 ** utils
@@ -75,7 +74,7 @@ void		ft_exec(char *cmd, char **argv);
 char			*get_current_dir();
 char			*create_dict_item(void *item);
 char			**parse_env(char **env);
-char			*get_dict_val_by_key(char *key);
+char			*get_dict_val_by_key(char *key, char **envp);
 void			remove_item_from_array(char ***root, char *del_item);
 void			del_dict_item(void *list);
 char			*get_value_env_item(char *str);
@@ -87,12 +86,12 @@ void			ft_strerror_fd(char *str_error, char *cmd, int fd);
 ** builtin functions
 ** builtin folder
 */
-void			ft_cd(char **args);
+void			ft_cd(char **argv, char **envp);
 void			ft_echo(char **argv);
-void			ft_env();
+void			ft_env(char **argv, char **envp);
 void 			ft_exit(char **argv);
-void			ft_export(char **argv);
+void			ft_export(char **argv, char ***envp);
 void			ft_pwd();
-void 			ft_unset(char **argv);
+void 			ft_unset(char **argv, char ***envp);
 
 #endif

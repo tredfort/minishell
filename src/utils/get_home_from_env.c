@@ -1,11 +1,11 @@
 #include "../../includes/minishell.h"
 
-char *get_dict_val_by_key(char *key)
+char *get_dict_val_by_key(char *key, char **envp)
 {
 	char	**t;
 	char	*item_key;
 
-	t = sh.env;
+	t = envp;
 	while (t)
 	{
 		item_key = get_key_env_item(*t);

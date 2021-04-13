@@ -5,17 +5,20 @@
 #include "../includes/minishell.h"
 
 char
-	*get_path()
+	*get_path(char **envp)
 {
 	char	**t;
 	char 	*key;
 
-	t = sh.env;
+	t = envp;
 	while(t && *t)
 	{
 		key = get_key_env_item(*t);
 		if (!ft_strcmp(key, "PATH"))
+		{
+			free(key);
 			return (get_value_env_item(*t));
+		}
 		free(key);
 		++t;
 	}
@@ -23,7 +26,7 @@ char
 }
 
 int
-	ft_exec_by_path(char *path, char *cmd, char **argv)
+	ft_exec_by_path(char *path, char *cmd, char **argv, char **envp)
 {
 	char *bin_path;
 	char *bin_path_slash;
@@ -47,7 +50,7 @@ int
 		if (pid < 0)
 			ft_strerror_fd(strerror(errno), cmd, 1);
 		if (pid == 0)
-			execve(bin_path, argv, sh.env);
+			execve(bin_path, argv, envp);
 		else
 			wait(0);
 		return (0);
@@ -56,24 +59,24 @@ int
 }
 
 void
-	ft_exec_from_path(char *cmd, char **argv)
+	ft_exec_from_path(char *cmd, char **argv, char **envp)
 {
 	char	*path;
 	char	**paths;
 	char	**t;
 
 	errno = 0;
-	errno = ft_exec_by_path(0, cmd, argv);
+	errno = ft_exec_by_path(0, cmd, argv, envp);
 	if (errno && errno != EISDIR)
 	{
-		path = get_path();
+		path = get_path(envp);
 		paths = ft_split(path, ':');
 		free(path);
 		t = paths;
 		while (t && *t && errno && errno != EISDIR)
 		{
 			errno = 0;
-			errno = ft_exec_by_path(*t, cmd, argv);
+			errno = ft_exec_by_path(*t, cmd, argv, envp);
 			++t;
 		}
 		free(paths);
@@ -83,25 +86,25 @@ void
 }
 
 void
-	ft_exec(char *cmd, char **argv)
+	ft_exec(char *cmd, char **argv, char ***envp)
 {
 	if (cmd)
 	{
 		if (!ft_strcmp(cmd, "cd"))
-			ft_cd(argv + 1);
+			ft_cd(argv + 1, *envp);
 		else if (!ft_strcmp(cmd, "echo"))
 			ft_echo(argv + 1);
 		else if (!ft_strcmp(cmd, "env"))
-			ft_env(argv + 1);
+			ft_env(argv + 1, *envp);
 		else if (!ft_strcmp(cmd, "exit"))
 			ft_exit(argv + 1);
 		else if (!ft_strcmp(cmd, "export"))
-			ft_export(argv + 1);
+			ft_export(argv + 1, envp);
 		else if (!ft_strcmp(cmd, "pwd"))
 			ft_pwd(argv + 1);
 		else if (!ft_strcmp(cmd, "unset"))
-			ft_unset(argv + 1);
+			ft_unset(argv + 1, envp);
 		else
-			ft_exec_from_path(cmd, argv);
+			ft_exec_from_path(cmd, argv, *envp);
 	}
 }
