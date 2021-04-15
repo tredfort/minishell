@@ -41,7 +41,7 @@ static void
 	i = 0;
 	while (*envp && (*envp)[i])
 	{
-		new_argv[i] = ft_strdup((*envp)[i]);
+		new_argv[i] = (*envp)[i];
 		++i;
 	}
 	while (argv && *argv)
@@ -50,9 +50,7 @@ static void
 		++argv;
 		++i;
 	}
-	//TODO:: do we need free all str inside of array?
 	free(*envp);
-	//TODO::check if added var on first place
 	*envp = new_argv;
 }
 
