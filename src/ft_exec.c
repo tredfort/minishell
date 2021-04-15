@@ -26,11 +26,12 @@ char
 }
 
 int
-	ft_exec_by_path(char *path, char *cmd, char **argv, char **envp)
+	ft_exec_by_path(char *path, char *cmd, char **argv, char **envp, int is_child_process)
 {
 	char *bin_path;
 	char *bin_path_slash;
 	struct stat st;
+	int pid;
 
 	if (path)
 	{
@@ -46,10 +47,13 @@ int
 		if (st.st_mode & S_IFDIR)
 			return (EISDIR);
 		errno = 0;
-		pid_t pid = fork();
-		if (pid < 0)
-			ft_strerror_fd(strerror(errno), cmd, 1);
-		if (pid == 0)
+		if (!is_child_process)
+		{
+			pid = fork();
+			if (pid < 0)
+				ft_strerror_fd(strerror(errno), cmd, 1);
+		}
+		if (pid == 0 || is_child_process)
 			execve(bin_path, argv, envp);
 		else
 			wait(0);
@@ -59,14 +63,14 @@ int
 }
 
 void
-	ft_exec_from_path(char *cmd, char **argv, char **envp)
+	ft_exec_from_path(char *cmd, char **argv, char **envp, int is_child_process)
 {
 	char	*path;
 	char	**paths;
 	char	**t;
 
 	errno = 0;
-	errno = ft_exec_by_path(0, cmd, argv, envp);
+	errno = ft_exec_by_path(0, cmd, argv, envp, is_child_process);
 	if (errno && errno != EISDIR)
 	{
 		path = get_path(envp);
@@ -76,7 +80,7 @@ void
 		while (t && *t && errno && errno != EISDIR)
 		{
 			errno = 0;
-			errno = ft_exec_by_path(*t, cmd, argv, envp);
+			errno = ft_exec_by_path(*t, cmd, argv, envp, is_child_process);
 			++t;
 		}
 		free(paths);
@@ -86,7 +90,7 @@ void
 }
 
 void
-	ft_exec(char *cmd, char **argv, char ***envp)
+	ft_exec(char *cmd, char **argv, char ***envp, int is_child_process)
 {
 	if (cmd)
 	{
@@ -105,6 +109,8 @@ void
 		else if (!ft_strcmp(cmd, "unset"))
 			ft_unset(argv + 1, envp);
 		else
-			ft_exec_from_path(cmd, argv, *envp);
+			ft_exec_from_path(cmd, argv, *envp, is_child_process);
 	}
+	if (is_child_process)
+		exit(0);
 }

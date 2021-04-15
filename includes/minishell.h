@@ -54,6 +54,12 @@ typedef struct	s_sh
 	t_list		*redir;
 }				t_sh;
 
+typedef struct 	s_proc
+{
+	int 		fd[2];
+	int 		pid;
+}				t_proc;
+
 typedef struct	s_2list
 {
 	char		*content;
@@ -76,7 +82,7 @@ char		skip_quotes(const char *str, int *i);
 void		skip_shielding(const char *str, int *i);
 void		skip_spaces(const char *str, int *i);
 char		*get_value(char **env, char *key);
-void		ft_exec(char *cmd, char **argv, char ***envp);
+void		ft_exec(char *cmd, char **argv, char ***envp, int is_child_process);
 
 char		*init_history(char *path, t_2list **lst);
 void		save_history(char *file, t_2list **lst);
