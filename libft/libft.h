@@ -30,6 +30,7 @@ char				*ft_strchr(const char *s, int c);
 char				*ft_strcpy(char *dest, char *src);
 char				*ft_strdup(const char *s1);
 char				*ft_strjoin(char const *s1, char const *s2);
+char				*ft_strjoin_and_free(char **s1, char *s2);
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char				*ft_strnstr(const char *str, const char *find, size_t len);
 char				*ft_strrchr(const char *s, int c);
