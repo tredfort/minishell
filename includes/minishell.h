@@ -59,12 +59,16 @@ int			get_next_line(int fd, char **line);
 int			init_history(char *file, t_2list **list);
 t_2list		*ft_2lstnew(void *content);
 void		ft_2lstadd_front(t_2list **lst, t_2list *new);
-char		skip_quotes(char *line, int *i);
 int			lexer(char *line);
 void		parser(char *line, t_list **lst);
 void		string_formatting(t_list *lst, char **env);
 void		print(t_list *lst);
-void		string_formatting(t_list *lst, char **env);
+
+char		after_spaces(const char *str);
+char		skip_quotes(const char *str, int *i);
+void		skip_shielding(const char *str, int *i);
+void		skip_spaces(const char *str, int *i);
+char		*get_value(char **env, char *key);
 void		ft_exec(char *cmd, char **argv, char ***envp);
 
 /*

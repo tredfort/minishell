@@ -28,6 +28,7 @@ SRCS =		main.c \
             parser.c \
             string_formatting.c \
             print.c \
+            utils.c \
 			builtin/ft_cd.c \
 			builtin/ft_echo.c \
 			builtin/ft_env.c \

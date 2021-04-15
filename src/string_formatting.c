@@ -40,73 +40,65 @@ static void	remove_shielding(char **str)
 	free(tmp);
 }
 
-static int	get_key(char *str, char **key, int *start)
+static int	get_keys(char *str, char **key)
 {
-	int		i;
+	int	i;
 
 	i = 0;
-	*key = NULL;
-	while (str[i])
-	{
-		if (str[i] == '\\' && str[i + 1] == '$')
-			i += 2;
-		if (str[i] == '\'')
-			skip_quotes(str, &i);
-		if (str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1])
-				|| str[i + 1] == '\'' || str[i + 1] == '"'))
-		{
-			*start = ++i;
-			while (str[i] && ft_isalnum(str[i]))
-				i++;
-			*key = ft_substr(str, *start, i - *start);
-			break ;
-		}
+	while (ft_isalnum(str[i]) || str[i] == '_')
 		i++;
-	}
+	*key = ft_substr(str, 0, i);
 	if (*key)
 		return (1);
 	return (0);
 }
 
-static void	set_value(char **str, char *value, int key_len, int start)
+static void	join_value(char **remainder, char **str, char **env, int *i)
 {
-	char	*tmp;
+	char	*key;
 
-	tmp = *str;
-	*str = ft_calloc(ft_strlen(tmp) + ft_strlen(value)
-			- key_len * 2 - 1, 1);
-	if (!*str)
-		return ;
-	ft_memcpy(*str, tmp, start - 1);
-	ft_strcpy(*str + start - 1, value + key_len + 1);
-	ft_strcpy(*str + ft_strlen(*str), tmp + start + key_len);
-	free(tmp);
+	if (!(*remainder)[*i + 1] && ++(*i))
+		*str = ft_strjoin_and_free(str, *remainder);
+	else
+	{
+		if (i > 0)
+		{
+			(*remainder)[*i] = '\0';
+			*str = ft_strjoin_and_free(str, *remainder);
+			*remainder += *i;
+			*i = 0;
+		}
+		if (get_keys(*remainder + 1, &key))
+		{
+			*str = ft_strjoin_and_free(str, get_value(env, key));
+			*remainder += ft_strlen(key) + 1;
+			free(key);
+		}
+	}
 }
 
 static void	swap_key_to_value(char **str, char **env)
 {
-	char	*key;
+	char	*remainder;
+	char	*tmp;
 	int		i;
-	int		start;
-	int		key_len;
 
-	while (get_key(*str, &key, &start))
+	remainder = *str;
+	tmp = *str;
+	*str = ft_strdup("");
+	i = 0;
+	while (remainder[i])
 	{
-		i = 0;
-		key_len = ft_strlen(key);
-		while (env[i])
-		{
-			if (!ft_strncmp(env[i], key, key_len) && env[i][key_len] == '=')
-			{
-				set_value(str, env[i], key_len, start);
-				break ;
-			}
+		skip_shielding(remainder, &i);
+		if (remainder[i] == '\'')
+			skip_quotes(remainder, &i);
+		if ((remainder[i] == '$' && remainder[i + 1] && remainder[i + 1] != '$')
+			|| !remainder[i + 1])
+			join_value(&remainder, str, env, &i);
+		else
 			i++;
-		}
-		if (!env[i])
-			ft_memset((*str) + start - 1, ' ', key_len + 1);
-		free(key);
 	}
+	free(tmp);
 }
 
 void	string_formatting(t_list *lst, char **env)

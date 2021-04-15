@@ -9,14 +9,15 @@ void	print(t_list *lst)
 	while (lst)
 	{
 		cmd = lst->content;
-		if (cmd->argv[0])
+		if (cmd->argv && cmd->argv[0])
 		{
-			printf("cmd: %s\n", cmd->argv[0]);
+			printf("cmd: %s, len = %lu\n", cmd->argv[0],
+		  	ft_strlen(cmd->argv[0]));
 			free(cmd->argv[0]);
 			i = 1;
 			while (cmd->argv[i])
 			{
-				printf("argv%d: %s\n", i, cmd->argv[i]);
+				printf("argv%d: %s, len = %lu\n", i, cmd->argv[i], ft_strlen(cmd->argv[i]));
 				free(cmd->argv[i]);
 				i++;
 			}

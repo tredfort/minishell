@@ -13,55 +13,30 @@
 #include "../includes/minishell.h"
 #define SPLITTER (-1)
 
-static void	add_instruction(char *line, int start, t_list **lst)
-{
-	char	*new;
-	int		i;
-
-	i = start + 2;
-	while (line[i] == ' ')
-		i++;
-	while (line[i] && !ft_strchr(" <>", line[i]))
-		i++;
-	new = ft_substr(line, start, i - start);
-	ft_memset(line + start, ' ', i - start);
-	ft_lstadd_back(lst, ft_lstnew(new));
-}
-
 static void	search_redirects(char *line, t_list **lst)
 {
 	int		i;
+	int		start;
+	char	*redir;
 
 	i = 0;
 	while (line[i])
 	{
-		while (line[i] == ' ')
-			i++;
-		if (line[i] == '"' || line[i] == '\'')
-			skip_quotes(line, &i);
+		skip_spaces(line, &i);
+		skip_shielding(line, &i);
+		skip_quotes(line, &i);
 		if (line[i] && ft_strchr("<>", line[i]))
-			add_instruction(line, i, lst);
-		else if (line[i] == '\\' && ft_strchr("'\"|\\<>$; ", line[i + 1]))
+		{
+			start = i;
 			i += 2;
-		else if (line[i] && !ft_strchr("'\"", line[i]))
-			i++;
-	}
-}
-
-static void	add_splitter(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		while (str[i] == ' ')
-			str[i++] = SPLITTER;
-		if (str[i] == '"' || str[i] == '\'')
-			skip_quotes(str, &i);
-		if (str[i] == '\\' && ft_strchr("'\"|\\<>$; ", str[i + 1]))
-			i += 2;
-		else if (str[i] && !ft_strchr("'\"", str[i]))
+			skip_spaces(line, &i);
+			while (line[i] && !ft_strchr(" <>", line[i]))
+				i++;
+			redir = ft_substr(line, start, i - start);
+			ft_memset(line + start, SPLITTER, i - start);
+			ft_lstadd_back(lst, ft_lstnew(redir));
+		}
+		else if (line[i] && !ft_strchr("'\"\\", line[i]))
 			i++;
 	}
 }
@@ -70,17 +45,25 @@ static t_sh	*add_new_command(char *line, int len, int pipe)
 {
 	t_sh	*cmd;
 	char	*tmp;
+	int		i;
 
 	cmd = malloc(sizeof(t_sh));
 	if (!cmd)
 		exit(1);
 	cmd->redir = NULL;
-	if (!line[len + 1])
-		len++;
 	cmd->pipe = pipe;
 	tmp = ft_substr(line, 0, len);
 	search_redirects(tmp, &cmd->redir);
-	add_splitter(tmp);
+	i = 0;
+	while (tmp[i])
+	{
+		skip_shielding(tmp, &i);
+		skip_quotes(tmp, &i);
+		while (tmp[i] == ' ')
+			tmp[i++] = SPLITTER;
+		if (tmp[i] && !ft_strchr("'\"\\", tmp[i]))
+			i++;
+	}
 	cmd->argv = ft_split(tmp, SPLITTER);
 	free(tmp);
 	return (cmd);
@@ -97,20 +80,20 @@ void	parser(char *line, t_list **lst)
 	*lst = NULL;
 	while (line[i])
 	{
-		if (line[i] == '\\' && ft_strchr("'\"|\\<>$; ", line[i + 1]))
-			i += 2;
-		if (line[i] == '"' || line[i] == '\'')
-			skip_quotes(line, &i);
-		if (!line[i] || line[i] == ';' || line[i] == '|' || !line[i + 1])
+		skip_spaces(line, &i);
+		skip_shielding(line, &i);
+		skip_quotes(line, &i);
+		if (ft_strchr(";|", after_spaces(line + i + 1)) && i++)
 		{
-			if (line[i] == ';' || !line[i + 1])
-				cmd = add_new_command(line + start, i - start, 0);
-			else if (line[i] == '|')
+			if (line[i] == '|' || after_spaces(line + i) == '|')
 				cmd = add_new_command(line + start, i - start, 1);
+			else
+				cmd = add_new_command(line + start, i - start, 0);
 			ft_lstadd_back(lst, ft_lstnew(cmd));
-			start = i + 1;
+			while ((line[i] == ' ' || line[i] == '|' || line[i] == ';') && i++)
+				start = i;
 		}
-		if (line[i] && !ft_strchr("'\"", line[i]))
+		if (line[i] && !ft_strchr("'\"\\", line[i]))
 			i++;
 	}
 }
