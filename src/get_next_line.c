@@ -6,7 +6,7 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:33:19 by tredfort          #+#    #+#             */
-/*   Updated: 2021/02/12 20:59:40 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/19 17:33:23 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static char	*residue_handling(char *residue, char **line)
 	ptr_n = NULL;
 	if (residue)
 	{
-		if ((ptr_n = ft_strchr(residue, '\n')))
+		ptr_n = ft_strchr(residue, '\n');
+		if (ptr_n)
 		{
 			*ptr_n++ = '\0';
 			*line = ft_strdup(residue);
@@ -37,7 +38,7 @@ static char	*residue_handling(char *residue, char **line)
 	return (ptr_n);
 }
 
-int			get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	static char	*residue;
 	char		buf[BUFFER_SIZE + 1];

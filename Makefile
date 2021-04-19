@@ -21,14 +21,18 @@ DIR_SRCS = src
 DIR_OBJS = objects
 
 SRCS =		main.c \
-			get_next_line.c \
 			ft_exec.c \
 			command_call_history.c \
 			lexer.c \
             parser.c \
             string_formatting.c \
+            input_cycle.c \
+            utils_for_input.c \
             print.c \
             utils.c \
+            get_next_line.c \
+            get_next_command.c \
+            clear_command_list.c \
 			builtin/ft_cd.c \
 			builtin/ft_echo.c \
 			builtin/ft_env.c \

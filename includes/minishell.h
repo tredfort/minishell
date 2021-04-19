@@ -27,7 +27,6 @@
 # define ERROR_MSG12 "minishell: syntax error near unexpected token `<<'\n"
 # define ERROR_MSG13 "minishell: syntax error near unexpected token `\\'\n"
 # include "../libft/libft.h"
-# include <unistd.h>
 //TODO::remove it before mark as completed
 # include <stdio.h>
 # include <unistd.h>
@@ -39,7 +38,14 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <sys/errno.h>
-# define SHELL_BUFFER 4097
+# include <curses.h>
+# define SHELL_BUFFER 4095
+
+typedef struct		s_term
+{
+	struct	termios	basic;
+	struct	termios	user;
+}					t_term;
 
 typedef struct	s_sh
 {
@@ -55,8 +61,9 @@ typedef struct	s_2list
 	void		*next;
 } 				t_2list;
 
+char	*bash_history;
+
 int			get_next_line(int fd, char **line);
-int			init_history(char *file, t_2list **list);
 t_2list		*ft_2lstnew(void *content);
 void		ft_2lstadd_front(t_2list **lst, t_2list *new);
 int			lexer(char *line);
@@ -70,6 +77,18 @@ void		skip_shielding(const char *str, int *i);
 void		skip_spaces(const char *str, int *i);
 char		*get_value(char **env, char *key);
 void		ft_exec(char *cmd, char **argv, char ***envp);
+
+char		*init_history(char *path, t_2list **lst);
+void		save_history(char *file, t_2list **lst);
+void		get_next_command(char **env, char **line, t_2list **head);
+void		input_cycle(char **line, char **tmp, t_2list **head, t_2list *item);
+void		sound_signal(void);
+void		ft_strdup_and_free(char **old_str, char *new_str);
+void		previous_command(t_2list **lst, t_2list *head, char	**tmp, char **line);
+void		next_command(t_2list **lst, char	**tmp, char **line);
+void		add_buffer(char **line, char *buf);
+int			my_putchar(int c);
+void		clear_command_list(t_list *lst);
 
 /*
 ** utils

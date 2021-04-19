@@ -21,9 +21,9 @@ static void	is_sintax_error(char *line, char **error, int *i)
 		*error = ERROR_MSG13;
 	else if (line[*i] == '"' || line[*i] == '\'')
 		quote = skip_quotes(line, i);
-	if (!*error && quote == '\'' && !after_spaces(line + *i + 1))
+	if (!*error && quote == '\'' && !after_spaces(line + *i))
 		*error = ERROR_MSG7;
-	else if (!*error && quote == '"' && !after_spaces(line + *i + 1))
+	else if (!*error && quote == '"' && !after_spaces(line + *i))
 		*error = ERROR_MSG8;
 	else if (!ft_strncmp(line + *i, ";;", 2))
 		*error = ERROR_MSG6;
@@ -68,6 +68,8 @@ int	lexer(char *line)
 	error = 0;
 	while (line[i] && !error)
 	{
+		if (line[i] == ' ' && after_spaces(line + i) == '#')
+			line[i] = '\0';
 		skip_spaces(line, &i);
 		skip_shielding(line, &i);
 		is_sintax_error(line, &error, &i);
