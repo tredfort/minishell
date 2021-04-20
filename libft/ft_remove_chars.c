@@ -6,7 +6,7 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 07:56:41 by tredfort          #+#    #+#             */
-/*   Updated: 2021/02/05 22:48:40 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/20 14:34:12 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 char	*ft_remove_chars(char *str, char *set)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;

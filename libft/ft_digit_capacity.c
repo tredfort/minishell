@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-int		ft_digit_capacity(int nb)
+int	ft_digit_capacity(int nb)
 {
 	int	len;
 

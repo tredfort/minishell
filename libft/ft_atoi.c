@@ -6,11 +6,11 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/29 14:03:09 by tredfort          #+#    #+#             */
-/*   Updated: 2020/12/11 18:10:25 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/20 14:06:00 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	unsigned long	nb;
 	int				sign;

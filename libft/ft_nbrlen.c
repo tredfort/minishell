@@ -6,18 +6,23 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/11 19:13:02 by tredfort          #+#    #+#             */
-/*   Updated: 2021/02/05 08:35:51 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/20 14:33:10 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_nbrlen(const char *s)
+#include "libft.h"
+
+int	ft_nbrlen(const char *s)
 {
-	int count;
+	int	count;
 
 	count = 0;
-	while (s && *s == '0')
-		s++;
-	while (s && *s >= '0' && *s <= '9' && s++)
-		count++;
+	if (s)
+	{
+		while (*s == '0')
+			s++;
+		while (ft_isdigit(*s) && s++)
+			count++;
+	}
 	return (count);
 }

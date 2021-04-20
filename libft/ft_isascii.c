@@ -6,11 +6,11 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/29 18:33:20 by tredfort          #+#    #+#             */
-/*   Updated: 2020/10/30 13:36:37 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/20 14:07:03 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_isascii(int c)
+int	ft_isascii(int c)
 {
 	return (c >= 0 && c <= 127);
 }

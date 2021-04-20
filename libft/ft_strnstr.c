@@ -6,7 +6,7 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 15:53:41 by tredfort          #+#    #+#             */
-/*   Updated: 2020/12/11 17:37:56 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/20 14:39:38 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_strnstr(const char *str, const char *find, size_t len)
 	if (!str)
 		return (0);
 	if (!*find)
-		return ((char*)str);
+		return ((char *)str);
 	i = 0;
 	while (str[i] && i < len)
 	{
@@ -30,7 +30,7 @@ char	*ft_strnstr(const char *str, const char *find, size_t len)
 			while (find[j] && str[i + j] == find[j] && i + j < len)
 				j++;
 			if (!find[j])
-				return ((char*)(str + i));
+				return ((char *)(str + i));
 		}
 		i++;
 	}

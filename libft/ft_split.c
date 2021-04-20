@@ -6,7 +6,7 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 16:51:03 by tredfort          #+#    #+#             */
-/*   Updated: 2020/11/20 11:36:21 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/20 14:46:36 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,28 +37,31 @@ static char	**ft_free(char **s, int i)
 	return (0);
 }
 
-char		**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	char	**arr;
 	int		size;
 	int		i;
 
-	if (!s || !(arr = (char **)ft_calloc(sizeof(char *),
-					(count_substr(s, c) + 1))))
-		return (0);
+	if (!s)
+		return (NULL);
+	arr = (char **)ft_calloc(sizeof(char *), (count_substr(s, c) + 1));
+	if (!arr)
+		return (NULL);
 	i = 0;
 	while (*s)
 	{
 		size = 0;
 		while (*s && *s == c)
 			s++;
-		while (*s && *s != c)
-		{
+		while (*s && *s != c && s++)
 			size++;
-			s++;
+		if (size)
+		{
+			arr[i] = ft_substr((char *)(s - size), 0, size);
+			if (!arr[i++])
+				return (ft_free(arr, i - 2));
 		}
-		if (size && !(arr[i++] = ft_substr((char *)(s - size), 0, size)))
-			return (ft_free(arr, i - 2));
 	}
 	return (arr);
 }

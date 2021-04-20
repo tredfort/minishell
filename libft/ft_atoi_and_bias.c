@@ -6,16 +6,16 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 07:44:50 by tredfort          #+#    #+#             */
-/*   Updated: 2021/01/28 08:00:45 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/20 14:11:48 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_atoi_and_bias(char **str)
+int	ft_atoi_and_bias(char **str)
 {
-	int nb;
-	int sign;
+	int	nb;
+	int	sign;
 
 	nb = 0;
 	sign = 1;

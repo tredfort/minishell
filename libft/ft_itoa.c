@@ -6,7 +6,7 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 15:59:50 by tredfort          #+#    #+#             */
-/*   Updated: 2020/11/28 20:55:41 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/20 15:13:52 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	size_number(unsigned int nb)
 	return (size);
 }
 
-char		*ft_itoa(int n)
+char 	*ft_itoa(int n)
 {
 	char			*number;
 	unsigned int	nb;
@@ -37,8 +37,9 @@ char		*ft_itoa(int n)
 	else
 		nb = (unsigned int)n;
 	size = size_number(nb);
-	if (!(number = (char *)malloc(sizeof(char) * (size + 1 + (n < 0 ? 1 : 0)))))
-		return (0);
+	number = (char *)malloc(sizeof(char) * (size + 1 + (n < 0 ? 1 : 0)));
+	if (!number)
+		return (NULL);
 	i = 0;
 	if (n < 0 && (number[i] = '-'))
 		i++;

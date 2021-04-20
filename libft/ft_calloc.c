@@ -6,7 +6,7 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 10:17:54 by tredfort          #+#    #+#             */
-/*   Updated: 2020/11/02 11:20:27 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/20 14:13:02 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	*ft_calloc(size_t count, size_t size)
 
 	i = 0;
 	total = size * count;
-	if (!(new = malloc(total)))
+	new = malloc(total);
+	if (!new)
 		return (0);
 	while (total-- > 0)
 	{

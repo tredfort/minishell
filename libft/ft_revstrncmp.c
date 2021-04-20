@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_revstrncmp(char *s1, char *s2, int n)
+int	ft_revstrncmp(char *s1, char *s2, int n)
 {
 	int	i;
 	int	j;
