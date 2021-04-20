@@ -50,6 +50,11 @@ void	get_next_command(char **env, char **line, t_2list **head)
 	tputs(save_cursor, 1, my_putchar);
 	*line = ft_strdup("");
 	input_cycle(line, &tmp, head, item);
+	if (*line && (*line)[0] == '#')
+	{
+		free(*line);
+		*line = NULL;
+	}
 	if (tmp)
 		free(tmp);
 	enable_basic_mode(&term);

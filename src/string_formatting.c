@@ -61,14 +61,18 @@ static void	join_value(char **remainder, char **str, char **env, int *i)
 		*str = ft_strjoin_and_free(str, *remainder);
 	else
 	{
-		if (i > 0)
+		if (*i > 0)
 		{
 			(*remainder)[*i] = '\0';
 			*str = ft_strjoin_and_free(str, *remainder);
 			*remainder += *i;
 			*i = 0;
 		}
-		if (get_keys(*remainder + 1, &key))
+		if (*(*remainder + 1) == '0')
+			*str = ft_strjoin_and_free(str, "minishell");
+		if (!ft_isalpha(*(*remainder + 1)))
+			*remainder += 2;
+		else if (get_keys(*remainder + 1, &key))
 		{
 			*str = ft_strjoin_and_free(str, get_value(env, key));
 			*remainder += ft_strlen(key) + 1;
@@ -92,8 +96,8 @@ static void	swap_key_to_value(char **str, char **env)
 		skip_shielding(remainder, &i);
 		if (remainder[i] == '\'')
 			skip_quotes(remainder, &i);
-		if ((remainder[i] == '$' && remainder[i + 1] && remainder[i + 1] != '$')
-			|| !remainder[i + 1])
+		if (!remainder[i + 1] || (remainder[i] == '$'
+			&& !ft_strchr("$?", remainder[i + 1])))
 			join_value(&remainder, str, env, &i);
 		else
 			i++;

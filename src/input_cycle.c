@@ -52,7 +52,7 @@ static int	new_line(char **line, t_2list **head)
 {
 	write(STDIN_FILENO, "\n", 1);
 	if (ft_strlen(*line))
-		ft_2lstadd_front(head, ft_2lstnew(*line));
+		ft_2lstadd_front(head, ft_2lstnew(ft_strdup(*line)));
 	else
 	{
 		free(*line);

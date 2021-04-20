@@ -50,7 +50,7 @@ int	main(int argc, char **argv, char **env)
 //			ft_lstclear(&lst, free);
 			clear_command_list(lst);
 		}
-//		free(line);
+		free(line);
 	}
 	return (0);
 }
