@@ -43,23 +43,23 @@ int	get_next_line(int fd, char **line)
 	static char	*residue;
 	char		buf[BUFFER_SIZE + 1];
 	char		*ptr_n;
-	char		*tmp;
 	size_t		rs;
 
 	if (fd < 0 || read(fd, buf, 0) < 0)
 		return (-1);
 	ptr_n = residue_handling(residue, line);
-	while (!ptr_n && (rs = read(fd, buf, BUFFER_SIZE)) > 0)
+	rs = 1;
+	while (!ptr_n && rs > 0)
 	{
+		rs = read(fd, buf, BUFFER_SIZE);
 		buf[rs] = '\0';
-		if ((ptr_n = ft_strchr(buf, '\n')))
+		ptr_n = ft_strchr(buf, '\n');
+		if (ptr_n)
 		{
 			*ptr_n++ = '\0';
 			residue = ft_strdup(ptr_n);
 		}
-		tmp = *line;
-		*line = ft_strjoin(*line, buf);
-		free(tmp);
+		*line = ft_strjoin_and_free(line, buf);
 	}
 	if (ptr_n)
 		return (1);
