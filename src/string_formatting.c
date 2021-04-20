@@ -92,7 +92,8 @@ static void	swap_key_to_value(char **str, char **env)
 		skip_shielding(remainder, &i);
 		if (remainder[i] == '\'')
 			skip_quotes(remainder, &i);
-		if ((remainder[i] == '$' && remainder[i + 1] && remainder[i + 1] != '$')
+		if ((remainder[i] == '$' && remainder[i + 1]
+			&& !ft_strchr("$?", remainder[i + 1]))
 			|| !remainder[i + 1])
 			join_value(&remainder, str, env, &i);
 		else

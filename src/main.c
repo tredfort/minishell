@@ -24,7 +24,7 @@ void stop_processes(t_list *proc_list)
 	while (t)
 	{
 		proc = t->content;
-		printf("ex pid = %d\n", proc->pid);
+		//printf("ex pid = %d\n", proc->pid);
 		t = t->next;
 	}
 	while (proc_list)
@@ -32,13 +32,13 @@ void stop_processes(t_list *proc_list)
 		proc = proc_list->content;
 		close(proc->fd[0]);
 		close(proc->fd[1]);
-		printf("close fd[0, 1] = { %d, %d }\n", proc->fd[0], proc->fd[1]);
+		//printf("close fd[0, 1] = { %d, %d }\n", proc->fd[0], proc->fd[1]);
 		waitpid(proc->pid, 0, 0);
-		printf("close pid = %d\n", proc->pid);
+		//printf("close pid = %d\n", proc->pid);
 		proc_list = proc_list->next;
 	}
 	free(proc_list);
-	printf("ended wait\n");
+	//printf("ended wait\n");
 }
 
 void
@@ -57,7 +57,7 @@ void
 	// opt2 : print error terminate command continue working
 	if(pipe(proc->fd) == -1)
 		exit(1);
-	printf("new pipes are %d and %d\n", proc->fd[0], proc->fd[1]);
+	//printf("new pipes are %d and %d\n", proc->fd[0], proc->fd[1]);
 	proc->pid = fork();
 	//TODO:: what do we need to do in case of this error?
 	// opt1 : print error exit
@@ -76,7 +76,7 @@ void
 				close(p->fd[0]);
 			t = t->next;
 		}
-		//printf("fd[0] = %d fd[1] = %d\n", fd[0], fd[1]);
+		////printf("fd[0] = %d fd[1] = %d\n", fd[0], fd[1]);
 		// not last function in pipes commands
 		// dup to stdout
 		if (temp->pipe)
@@ -94,7 +94,7 @@ void
 	else{
 		t_list *new = ft_lstnew(proc);
 		t_proc *p = new->content;
-		printf("added new list id = %d fd[0,1] = %d %d\n", p->pid, p->fd[0], p->fd[1]);
+		//printf("added new list id = %d fd[0,1] = %d %d\n", p->pid, p->fd[0], p->fd[1]);
 		ft_lstadd_back(process, ft_lstnew(proc));
 	}
 }
@@ -120,20 +120,20 @@ void
 				while (*file && *file == ' ')
 					file += 1;
 				int new_fd = open(file, O_RDONLY, S_IRUSR | S_IWUSR);
-				printf("new fd for read = %d\n", new_fd);
+				//printf("new fd for read = %d\n", new_fd);
 				if (new_fd == -1)
 					ft_strerror_fd(strerror(errno), "<",1);
 				//TODO:: check if dup2 succes
 				dup2(new_fd, 0);
 				close(new_fd);
 			}
-			else if(!strcmp(str, ">>"))
+			else if(!strncmp(str, ">>", 2))
 			{
 				char *file = str + 2;
 				while (*file && *file == ' ')
 					file += 1;
 				int new_fd = open(file, O_CREAT | O_WRONLY | O_APPEND, S_IRWXU);
-				printf("new fd for >> = %d\n", new_fd);
+				//printf("new fd for >> = %d\n", new_fd);
 				if (new_fd == -1)
 					//TODO:: open didn't work
 					ft_strerror_fd(strerror(errno), ">>",1);
@@ -146,10 +146,10 @@ void
 				char *file = str + 1;
 				while (*file && *file == ' ')
 					file += 1;
-				printf("will execute open\n");
+				//printf("will execute open\n");
 				//sleep(10);
 				int new_fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
-				printf("new fd for > = %d\n", new_fd);
+				//printf("new fd for > = %d\n", new_fd);
 				//sleep(10);
 				if (new_fd == -1)
 					ft_strerror_fd(strerror(errno), ">",1);
@@ -179,10 +179,27 @@ void
 		while (t)
 		{
 			p = t->content;
-			printf("shows list id = %d fd[0,1] = %d %d\n", p->pid, p->fd[0], p->fd[1]);
+			//printf("shows list id = %d fd[0,1] = %d %d\n", p->pid, p->fd[0], p->fd[1]);
 			t = t->next;
 		}
 		stop_processes(process);
+	}
+}
+
+void	sigint_handler(int sig_num)
+{
+	if (sig_num == SIGINT)
+	{
+		ft_putchar_fd('\n', 2);
+		prompt();
+		//signal(SIGINT, sigint_handler);
+	}
+	else if (sig_num == SIGQUIT)
+	{
+		//force_stop child process
+		ft_putstr_fd("Quit: ", 2);
+		ft_putnbr_fd(sig_num, 2);
+		ft_putendl_fd(NULL, 2);
 	}
 }
 
@@ -196,6 +213,8 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, sigint_handler);
 	envp = parse_env(env);
 	bash_history = init_history(get_value(env, "HOME"), &history);
 	while (envp)
@@ -213,6 +232,7 @@ int	main(int argc, char **argv, char **env)
 //			executor(lst, env);
 //			ft_lstclear(&lst, free);
 			clear_command_list(lst);
+			//printf("errno is %d\n", errno);
 		}
 //		free(line);
 	}

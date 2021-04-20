@@ -46,7 +46,7 @@ int
 	{
 		if (st.st_mode & S_IFDIR)
 			return (EISDIR);
-		errno = 0;
+		//errno = 0;
 		if (!is_child_process)
 		{
 			pid = fork();
@@ -54,7 +54,10 @@ int
 				ft_strerror_fd(strerror(errno), cmd, 1);
 		}
 		if (pid == 0 || is_child_process)
+		{
+			//child_signals_handler();
 			execve(bin_path, argv, envp);
+		}
 		else
 			wait(0);
 		return (0);
@@ -69,7 +72,7 @@ void
 	char	**paths;
 	char	**t;
 
-	errno = 0;
+//	errno = 0;
 	errno = ft_exec_by_path(0, cmd, argv, envp, is_child_process);
 	if (errno && errno != EISDIR)
 	{
