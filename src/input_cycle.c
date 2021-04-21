@@ -42,17 +42,18 @@ static void	end_of_file(char *line)
 	if (!ft_strlen(line))
 	{
 		ft_putendl_fd("exit", STDIN_FILENO);
+		enable_basic_mode();
 		ft_exit(NULL);
 	}
 	else
 		sound_signal();
 }
 
-static int	new_line(char **line, t_2list **head)
+static int	new_line(char **line)
 {
 	write(STDIN_FILENO, "\n", 1);
 	if (ft_strlen(*line))
-		ft_2lstadd_front(head, ft_2lstnew(ft_strdup(*line)));
+		ft_2lstadd_front(&g_mini.lst, ft_2lstnew(ft_strdup(*line)));
 	else
 	{
 		free(*line);
@@ -61,25 +62,26 @@ static int	new_line(char **line, t_2list **head)
 	return (1);
 }
 
-void	input_cycle(char **line, char **tmp, t_2list **head, t_2list *item)
+void	input_cycle(char **line, char **tmp, t_2list *lst)
 {
 	char	buf[SHELL_BUFFER + 1];
 	int		len;
 
+	lst = NULL;
 	while (1)
 	{
 		len = read(STDIN_FILENO, buf, SHELL_BUFFER);
 		buf[len] = '\0';
-		if (*buf == '\n' && new_line(line, head))
+		if (*buf == '\n' && new_line(line))
 			break ;
 		else if (*buf == '\3' && interrupt_signal(line))
 			break ;
 		else if (*buf == '\4')
 			end_of_file(*line);
 		else if (!ft_strcmp(buf, "\e[A"))
-			previous_command(&item, *head, tmp, line);
+			previous_command(&lst, tmp, line);
 		else if (!ft_strcmp(buf, "\e[B"))
-			next_command(&item, tmp, line);
+			next_command(&lst, tmp, line);
 		else if (!ft_strcmp(buf, "\177"))
 			backspace(*line);
 		else if ((*buf > 0 && *buf < 32) || *buf == 127)

@@ -36,8 +36,6 @@ void
 		{
 			if (is_n_flag(argv[0]))
 				flag_n = 1;
-			else if (!ft_strncmp(argv[0], "$?", 2))
-				ft_putnbr_fd(errno, STDIN_FILENO);
 			else
 			{
 				ft_putstr_fd(argv[0], 1);

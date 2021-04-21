@@ -212,18 +212,17 @@ int	main(int argc, char **argv, char **env)
 	char	*line;
 	char	**envp;
 	t_list	*lst;
-	t_2list	*history;
 
 	(void)argc;
 	(void)argv;
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, sigint_handler);
 	envp = parse_env(env);
-	bash_history = init_history(get_value(env, "HOME"), &history);
+	init_history(get_value(env, "HOME"));
 	while (envp)
 	{
 		prompt();
-		get_next_command(env, &line, &history);
+		get_next_command(env, &line);
 //		get_next_line(STDIN_FILENO, &line);
 		if (line && !lexer(line))
 		{
@@ -231,11 +230,8 @@ int	main(int argc, char **argv, char **env)
 			parser(line, &lst);
 			string_formatting(lst, envp);
 			ft_executor(lst, &envp);
-			//print(lst);
-//			executor(lst, env);
-//			ft_lstclear(&lst, free);
+//			print(lst);
 			clear_command_list(lst);
-			//printf("errno is %d\n", errno);
 		}
 		free(line);
 	}

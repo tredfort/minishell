@@ -6,7 +6,7 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 05:55:59 by tredfort          #+#    #+#             */
-/*   Updated: 2021/04/08 05:56:08 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/22 02:24:44 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,39 +17,39 @@ int	my_putchar(int c)
 	return (write(STDIN_FILENO, &c, 1));
 }
 
-static void	enable_custom_mode(t_term *term, char *term_name)
+static void	enable_custom_mode(char *term_name)
 {
-	tcgetattr(STDIN_FILENO, &term->basic);
-	tcgetattr(STDIN_FILENO, &term->user);
-	term->user.c_lflag &= ~(ECHO);
-	term->user.c_lflag &= ~(ISIG);
-	term->user.c_lflag &= ~(ICANON);
-	tcsetattr(STDIN_FILENO, TCSANOW, &term->user);
+	struct termios	user;
+
+	tcgetattr(STDIN_FILENO, &g_mini.basic);
+	tcgetattr(STDIN_FILENO, &user);
+	user.c_lflag &= ~(ECHO);
+	user.c_lflag &= ~(ISIG);
+	user.c_lflag &= ~(ICANON);
+	tcsetattr(STDIN_FILENO, TCSANOW, &user);
 	if (!term_name)
 		term_name = getenv("TERM");
 	if (!term_name)
 		term_name = "xterm-256color";
 	if (tgetent(STDIN_FILENO, term_name) < 1)
-		exit(1);
+		exit(errno);
 }
 
-static void	enable_basic_mode(t_term *term)
+void	enable_basic_mode(void)
 {
-	tcsetattr(STDIN_FILENO, TCSANOW, &term->basic);
+	tcsetattr(STDIN_FILENO, TCSANOW, &g_mini.basic);
 }
 
-void	get_next_command(char **env, char **line, t_2list **head)
+void	get_next_command(char **env, char **line)
 {
-	t_term	term;
 	char	*tmp;
-	t_2list	*item;
+	t_2list	*lst;
 
 	tmp = NULL;
-	item = NULL;
-	enable_custom_mode(&term, get_value(env, "TERM"));
+	enable_custom_mode(get_value(env, "TERM"));
 	tputs(save_cursor, 1, my_putchar);
 	*line = ft_strdup("");
-	input_cycle(line, &tmp, head, item);
+	input_cycle(line, &tmp, lst);
 	if (*line && (*line)[0] == '#')
 	{
 		free(*line);
@@ -57,5 +57,5 @@ void	get_next_command(char **env, char **line, t_2list **head)
 	}
 	if (tmp)
 		free(tmp);
-	enable_basic_mode(&term);
+	enable_basic_mode();
 }

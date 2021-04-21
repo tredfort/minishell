@@ -67,7 +67,16 @@ typedef struct	s_2list
 	void		*next;
 } 				t_2list;
 
-char	*bash_history;
+typedef struct s_mini
+{
+	char			*history;
+	t_2list			*lst;
+	struct termios	basic;
+	int				status;
+	int 			*pids;
+} 				t_mini;
+
+t_mini		g_mini;
 
 int			get_next_line(int fd, char **line);
 t_2list		*ft_2lstnew(void *content);
@@ -84,17 +93,19 @@ void		skip_spaces(const char *str, int *i);
 char		*get_value(char **env, char *key);
 void		ft_exec(char *cmd, char **argv, char ***envp, int is_child_process);
 
-char		*init_history(char *path, t_2list **lst);
-void		save_history(char *file, t_2list **lst);
-void		get_next_command(char **env, char **line, t_2list **head);
-void		input_cycle(char **line, char **tmp, t_2list **head, t_2list *item);
+void		init_history(char *path);
+void		save_history(void);
+void		get_next_command(char **env, char **line);
+void		input_cycle(char **line, char **tmp, t_2list *lst);
 void		sound_signal(void);
 void		ft_strdup_and_free(char **old_str, char *new_str);
-void		previous_command(t_2list **lst, t_2list *head, char	**tmp, char **line);
-void		next_command(t_2list **lst, char	**tmp, char **line);
+void		previous_command(t_2list **lst, char **tmp, char **line);
+void		next_command(t_2list **lst, char **tmp, char **line);
 void		add_buffer(char **line, char *buf);
 int			my_putchar(int c);
 void		clear_command_list(t_list *lst);
+void		enable_basic_mode(void);
+void		remove_shielding(char **str);
 
 /*
 ** utils

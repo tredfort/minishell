@@ -6,39 +6,11 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 23:23:08 by tredfort          #+#    #+#             */
-/*   Updated: 2021/04/13 00:46:59 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/22 02:23:14 by tredfort         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-static void	remove_shielding(char **str)
-{
-	char	*tmp;
-	int		i;
-	int		j;
-
-	tmp = *str;
-	*str = malloc(ft_strlen(tmp));
-	if (!*str)
-		return ;
-	i = 0;
-	j = 0;
-	while (tmp[i])
-	{
-		if (tmp[i] == '"' || tmp[i] == '\\')
-			i++;
-		else if (tmp[i] == '\'' && ++i)
-		{
-			while (tmp[i] && tmp[i] != '\'')
-				(*str)[j++] = tmp[i++];
-		}
-		else
-			(*str)[j++] = tmp[i++];
-	}
-	(*str)[j] = '\0';
-	free(tmp);
-}
 
 static int	get_keys(char *str, char **key)
 {
@@ -51,6 +23,21 @@ static int	get_keys(char *str, char **key)
 	if (*key)
 		return (1);
 	return (0);
+}
+
+static void	join_not_alpha(char **remainder, char **str)
+{
+	char	*number;
+
+	if (*(*remainder + 1) == '0')
+		*str = ft_strjoin_and_free(str, "minishell");
+	else if (*(*remainder + 1) == '?')
+	{
+		number = ft_itoa(errno); // TODO: заменить на g_mini.status
+		*str = ft_strjoin_and_free(str, number);
+		free(number);
+	}
+	*remainder += 2;
 }
 
 static void	join_value(char **remainder, char **str, char **env, int *i)
@@ -68,14 +55,12 @@ static void	join_value(char **remainder, char **str, char **env, int *i)
 			*remainder += *i;
 			*i = 0;
 		}
-		if (*(*remainder + 1) == '0')
-			*str = ft_strjoin_and_free(str, "minishell");
 		if (!ft_isalpha(*(*remainder + 1)))
-			*remainder += 2;
+			join_not_alpha(remainder, str);
 		else if (get_keys(*remainder + 1, &key))
 		{
 			*str = ft_strjoin_and_free(str, get_value(env, key));
-			*remainder += ft_strlen(key) + 1;
+			*remainder += (ft_strlen(key) + 1);
 			free(key);
 		}
 	}
@@ -96,10 +81,10 @@ static void	swap_key_to_value(char **str, char **env)
 		skip_shielding(remainder, &i);
 		if (remainder[i] == '\'')
 			skip_quotes(remainder, &i);
-		if (!remainder[i + 1] || (remainder[i] == '$'
-			&& !ft_strchr("$?", remainder[i + 1])))
+		if (!remainder[i] || !remainder[i + 1] || (remainder[i] == '$'
+				&& remainder[i + 1] != '$'))
 			join_value(&remainder, str, env, &i);
-		else
+		else if (remainder[i])
 			i++;
 	}
 	free(tmp);
@@ -115,9 +100,11 @@ void	string_formatting(t_list *lst, char **env)
 	{
 		cmd = lst->content;
 		i = 0;
-		while (cmd->argv[i])
+		while (cmd->argv && cmd->argv[i])
 		{
 			swap_key_to_value(&cmd->argv[i], env);
+			if (!ft_strcmp(cmd->argv[0], "export"))
+				break ;
 			remove_shielding(&cmd->argv[i++]);
 		}
 		rd = cmd->redir;

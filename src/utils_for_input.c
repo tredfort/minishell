@@ -26,18 +26,18 @@ void	sound_signal(void)
 	write(STDERR_FILENO, "\a", 1);
 }
 
-void	previous_command(t_2list **lst, t_2list *head, char	**tmp, char **line)
+void	previous_command(t_2list **lst, char **tmp, char **line)
 {
-	if (*lst && !(*lst)->next)
+	if ((*lst && !(*lst)->next) || !g_mini.lst)
 		sound_signal();
-	else
+	else if (g_mini.lst)
 	{
 		tputs(restore_cursor, 1, my_putchar);
 		tputs(tigetstr("ed"), 1, my_putchar);
 		if (!*lst)
 		{
 			*tmp = ft_strdup(*line);
-			*lst = head;
+			*lst = g_mini.lst;
 		}
 		else
 			*lst = (*lst)->next;
@@ -46,7 +46,7 @@ void	previous_command(t_2list **lst, t_2list *head, char	**tmp, char **line)
 	}
 }
 
-void	next_command(t_2list **lst, char	**tmp, char **line)
+void	next_command(t_2list **lst, char **tmp, char **line)
 {
 	if (!*lst)
 		sound_signal();
