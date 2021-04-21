@@ -79,7 +79,7 @@ void
 		////printf("fd[0] = %d fd[1] = %d\n", fd[0], fd[1]);
 		// not last function in pipes commands
 		// dup to stdout
-		if (temp->pipe)
+		if (temp->pipe && !temp->redir)
 			dup2(proc->fd[1], STDOUT_FILENO);
 		//if pipe_mode == 0 it is the first pipe
 		if (!first_pipe)
@@ -102,15 +102,15 @@ void
 void
 	ft_executor(t_list *lst, char ***envp)
 {
-	t_sh	*temp;
+	t_sh	*cmd;
 	t_list 	*process;
 	t_list	*redir;
 	int		init_fd[2] = {dup(0), dup(1)};
 	process = 0;
 	while(lst)
 	{
-		temp = lst->content;
-		redir = temp->redir;
+		cmd = lst->content;
+		redir = cmd->redir;
 		while (redir)
 		{
 			char *str = redir->content;
@@ -148,7 +148,8 @@ void
 					file += 1;
 				//printf("will execute open\n");
 				//sleep(10);
-				int new_fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
+				//TODO:: setup right chmod
+				int new_fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU | S_IRWXG |S_IRWXO);
 				//printf("new fd for > = %d\n", new_fd);
 				//sleep(10);
 				if (new_fd == -1)
@@ -159,13 +160,15 @@ void
 			}
 			redir = redir->next;
 		}
-		if (temp->argv)
+		if (cmd->argv)
 		{
-			if (temp->pipe || process != 0)
-				ft_pipe(temp, envp, &process);
+			if (cmd->pipe || process != 0)
+				ft_pipe(cmd, envp, &process);
 			else
-				ft_exec(temp->argv[0], temp->argv, envp, 0);
+				ft_exec(cmd->argv[0], cmd->argv, envp, 0);
 		}
+//		wait(0);
+//		exit(0);
 		lst = lst->next;
 	}
 	dup2(init_fd[0], 0);
@@ -191,7 +194,8 @@ void	sigint_handler(int sig_num)
 	if (sig_num == SIGINT)
 	{
 		ft_putchar_fd('\n', 2);
-		prompt();
+		//TODO:: exit status?
+		//prompt();
 		//signal(SIGINT, sigint_handler);
 	}
 	else if (sig_num == SIGQUIT)
@@ -209,7 +213,6 @@ int	main(int argc, char **argv, char **env)
 	char	**envp;
 	t_list	*lst;
 	t_2list	*history;
-	t_sh	*temp;
 
 	(void)argc;
 	(void)argv;
@@ -228,7 +231,7 @@ int	main(int argc, char **argv, char **env)
 			parser(line, &lst);
 			string_formatting(lst, envp);
 			ft_executor(lst, &envp);
-//			print(lst);
+			//print(lst);
 //			executor(lst, env);
 //			ft_lstclear(&lst, free);
 			clear_command_list(lst);
