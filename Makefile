@@ -29,6 +29,7 @@ SRCS =		main.c \
             string_formatting.c \
             input_cycle.c \
             utils_for_input.c \
+            remove_shielding.c \
             print.c \
             utils.c \
             get_next_line.c \
