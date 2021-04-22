@@ -6,7 +6,7 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 15:59:50 by tredfort          #+#    #+#             */
-/*   Updated: 2021/04/20 15:13:52 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/22 22:14:13 by smephest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,13 @@ char 	*ft_itoa(int n)
 	else
 		nb = (unsigned int)n;
 	size = size_number(nb);
-	number = (char *)malloc(sizeof(char) * (size + 1 + (n < 0 ? 1 : 0)));
+	number = (char *)malloc(sizeof(char) * (size + 1 + (int)(n < 0)));
 	if (!number)
 		return (NULL);
 	i = 0;
-	if (n < 0 && (number[i] = '-'))
-		i++;
+	//TODO:: check this work
+	if (n < 0 && ++i)
+		number[0] = '-';
 	i += size;
 	number[i] = '\0';
 	while (size-- > 0)

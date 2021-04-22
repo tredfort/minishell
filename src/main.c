@@ -12,6 +12,8 @@
 
 #include "../includes/minishell.h"
 
+int g_exit;
+
 static void	prompt(void)
 {
 	ft_putstr_fd("minishell> ", STDIN_FILENO);
@@ -20,25 +22,16 @@ static void	prompt(void)
 void stop_processes(t_list *proc_list)
 {
 	t_proc *proc;
-	t_list *t = proc_list;
-	while (t)
-	{
-		proc = t->content;
-		//printf("ex pid = %d\n", proc->pid);
-		t = t->next;
-	}
+
 	while (proc_list)
 	{
 		proc = proc_list->content;
 		close(proc->fd[0]);
 		close(proc->fd[1]);
-		//printf("close fd[0, 1] = { %d, %d }\n", proc->fd[0], proc->fd[1]);
 		waitpid(proc->pid, 0, 0);
-		//printf("close pid = %d\n", proc->pid);
 		proc_list = proc_list->next;
 	}
 	free(proc_list);
-	//printf("ended wait\n");
 }
 
 void
@@ -52,18 +45,12 @@ void
 	proc = ft_calloc(1, sizeof(t_proc));
 	if (!proc)
 		exit(3);
-	//TODO:: what do we need to do in case of this error?
-	// opt1 : print error exit
-	// opt2 : print error terminate command continue working
 	if(pipe(proc->fd) == -1)
-		exit(1);
+		exit(errno);
 	//printf("new pipes are %d and %d\n", proc->fd[0], proc->fd[1]);
 	proc->pid = fork();
-	//TODO:: what do we need to do in case of this error?
-	// opt1 : print error exit
-	// opt2 : print error terminate command continue working
 	if (proc->pid == -1)
-		exit(1);
+		exit(errno);
 	if (proc->pid == 0)
 	{
 		//TODO:: maybe we need to delete it?
@@ -79,7 +66,7 @@ void
 		////printf("fd[0] = %d fd[1] = %d\n", fd[0], fd[1]);
 		// not last function in pipes commands
 		// dup to stdout
-		if (temp->pipe && !temp->redir)
+		if (temp->pipe && (!temp->redir || *((char*)(temp->redir)->content) == '<'))
 			dup2(proc->fd[1], STDOUT_FILENO);
 		//if pipe_mode == 0 it is the first pipe
 		if (!first_pipe)
@@ -91,12 +78,8 @@ void
 		close(proc->fd[1]);
 		ft_exec(temp->argv[0], temp->argv, envp, 1);
 	}
-	else{
-		t_list *new = ft_lstnew(proc);
-		t_proc *p = new->content;
-		//printf("added new list id = %d fd[0,1] = %d %d\n", p->pid, p->fd[0], p->fd[1]);
+	else
 		ft_lstadd_back(process, ft_lstnew(proc));
-	}
 }
 
 void
@@ -119,8 +102,7 @@ void
 				char *file = str + 1;
 				while (*file && *file == ' ')
 					file += 1;
-				int new_fd = open(file, O_RDONLY, S_IRUSR | S_IWUSR);
-				//printf("new fd for read = %d\n", new_fd);
+				int new_fd = open(file, O_RDONLY, S_IRUSR | S_IWUSR, 0000644);
 				if (new_fd == -1)
 					ft_strerror_fd(strerror(errno), "<",1);
 				//TODO:: check if dup2 succes
@@ -132,8 +114,7 @@ void
 				char *file = str + 2;
 				while (*file && *file == ' ')
 					file += 1;
-				int new_fd = open(file, O_CREAT | O_WRONLY | O_APPEND, S_IRWXU);
-				//printf("new fd for >> = %d\n", new_fd);
+				int new_fd = open(file, O_CREAT | O_WRONLY | O_APPEND, 0000644);
 				if (new_fd == -1)
 					//TODO:: open didn't work
 					ft_strerror_fd(strerror(errno), ">>",1);
@@ -141,17 +122,14 @@ void
 				dup2(new_fd, 1);
 				close(new_fd);
 			}
+
 			else if (*str == '>')
 			{
 				char *file = str + 1;
 				while (*file && *file == ' ')
 					file += 1;
-				//printf("will execute open\n");
-				//sleep(10);
 				//TODO:: setup right chmod
-				int new_fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU | S_IRWXG |S_IRWXO);
-				//printf("new fd for > = %d\n", new_fd);
-				//sleep(10);
+				int new_fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 				if (new_fd == -1)
 					ft_strerror_fd(strerror(errno), ">",1);
 				//TODO:: check if dup2 succes
@@ -160,6 +138,19 @@ void
 			}
 			redir = redir->next;
 		}
+//		void redir_prep(char *str)
+//		{
+//			char *file = str + 1;
+//			while (*file && *file == ' ')
+//				file += 1;
+//			int new_fd = open(file, O_RDONLY, S_IRUSR | S_IWUSR, 0000644);
+//			if (new_fd == -1)
+//				exit(errno);
+//			//TODO:: check if dup2 succes
+//			if(dup2(new_fd, 1))
+//				exit(errno);
+//			close(new_fd);
+//		}
 		if (cmd->argv)
 		{
 			if (cmd->pipe || process != 0)
@@ -176,34 +167,23 @@ void
 	close(init_fd[0]);
 	close(init_fd[1]);
 	if (process != 0)
-	{
-		t_list *t = process;
-		t_proc *p;
-		while (t)
-		{
-			p = t->content;
-			//printf("shows list id = %d fd[0,1] = %d %d\n", p->pid, p->fd[0], p->fd[1]);
-			t = t->next;
-		}
 		stop_processes(process);
-	}
 }
 
 void	sigint_handler(int sig_num)
 {
-	if (sig_num == SIGINT)
+	int stat_loc;
+
+	wait(&stat_loc);
+	enable_basic_mode();
+	if (stat_loc == sig_num)
 	{
-		ft_putchar_fd('\n', 2);
-		//TODO:: exit status?
-		//prompt();
-		//signal(SIGINT, sigint_handler);
-	}
-	else if (sig_num == SIGQUIT)
-	{
-		//force_stop child process
-		ft_putstr_fd("Quit: ", 2);
-		ft_putnbr_fd(sig_num, 2);
-		ft_putendl_fd(NULL, 2);
+		if (sig_num == SIGINT)
+			ft_putchar_fd('\n', 2);
+		else if (sig_num == SIGQUIT)
+			ft_putstr_fd("Quit: 3\n", 2);
+		g_exit = 128 + sig_num;
+		errno = 128 + sig_num;
 	}
 }
 

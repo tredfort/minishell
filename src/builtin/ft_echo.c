@@ -28,25 +28,19 @@ void
 	int i;
 	int flag_n;
 
-	i = -1;
+	i = 0;
 	flag_n = 0;
-	while (argv[++i])
+	while (argv[i] && is_n_flag(argv[i]))
 	{
-		if (i == 0)
-		{
-			if (is_n_flag(argv[0]))
-				flag_n = 1;
-			else
-			{
-				ft_putstr_fd(argv[0], 1);
-			}
-		}
-		else
-		{
-			if (!flag_n || i != 1)
-				ft_putchar_fd(' ', 1);
-			ft_putstr_fd(argv[i], 1);
-		}
+		flag_n = 1;
+		++i;
+	}
+	while (argv[i])
+	{
+		ft_putstr_fd(argv[i], 1);
+		if (argv[i + 1])
+			ft_putchar_fd(' ', 1);
+		++i;
 	}
 	if (!flag_n)
 		ft_putchar_fd('\n', 1);
