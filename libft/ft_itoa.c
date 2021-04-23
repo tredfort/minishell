@@ -41,7 +41,6 @@ char 	*ft_itoa(int n)
 	if (!number)
 		return (NULL);
 	i = 0;
-	//TODO:: check this work
 	if (n < 0 && ++i)
 		number[0] = '-';
 	i += size;

@@ -41,12 +41,6 @@
 # include <curses.h>
 # define SHELL_BUFFER 4095
 
-typedef struct		s_term
-{
-	struct	termios	basic;
-	struct	termios	user;
-}					t_term;
-
 typedef struct	s_sh
 {
 	char		**argv;
@@ -111,9 +105,8 @@ void		remove_shielding(char **str);
 ** utils
 ** folder utils
 */
-char			*get_current_dir();
 char			*create_dict_item(void *item);
-char			**parse_env(char **env);
+char			**init_envp(char **env);
 char			*get_dict_val_by_key(char *key, char **envp);
 void			remove_item_from_array(char ***root, char *del_item);
 void			del_dict_item(void *list);
@@ -121,12 +114,15 @@ char			*get_value_env_item(char *str);
 char			*get_key_env_item(char *str);
 size_t			ft_strarr_size(char **str_arr);
 void			ft_strerror_fd(char *str_error, char *cmd, int fd);
+void			add_variables(char **argv, char ***envp);
+char			**init_envp_with_default_variables(char **env);
+int				key_exists(char	*key, char **envp);
 
 /*
 ** builtin functions
 ** builtin folder
 */
-void			ft_cd(char **argv, char **envp);
+void			ft_cd(char **argv, char ***envp);
 void			ft_echo(char **argv);
 void			ft_env(char **argv, char **envp);
 void 			ft_exit(char **argv);

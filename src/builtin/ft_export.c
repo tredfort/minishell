@@ -9,7 +9,7 @@ char
 	char	**sort_argv;
 
 
-	sort_argv = parse_env(argv);
+	sort_argv = init_envp(argv);
 	i = 0;
 	while (sort_argv[i])
 	{
@@ -29,7 +29,7 @@ char
 	return sort_argv;
 }
 
-static void
+void
 	add_variables(char **argv, char ***envp)
 {
 	size_t	size;

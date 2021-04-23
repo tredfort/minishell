@@ -42,14 +42,13 @@ SRCS =		main.c \
 			builtin/ft_export.c \
 			builtin/ft_pwd.c \
 			builtin/ft_unset.c \
-			utils/get_current_dir.c \
 			utils/parse_env.c \
 			utils/get_home_from_env.c \
 			utils/del_list_item.c \
 			utils/remove_item_from_array.c \
 			utils/env_item.c \
 			utils/ft_strerror_fd.c \
-			utils/ft_strarr_size.c
+			utils/key_exists.c \
 
 #SRCS :=		$(addprefix $(DIR_SRCS), $(SRCS))
 

@@ -8,8 +8,7 @@ void ft_pwd()
 {
 	char	*res;
 
-	res = get_current_dir();
-	ft_putstr_fd(res, 1);
-	ft_putchar_fd('\n',1);
+	res = getcwd(NULL, 0);
+	ft_putendl_fd(res, STDOUT_FILENO);
 	free(res);
 }

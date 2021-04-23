@@ -98,7 +98,7 @@ void
 	if (cmd)
 	{
 		if (!ft_strcmp(cmd, "cd"))
-			ft_cd(argv + 1, *envp);
+			ft_cd(argv + 1, envp);
 		else if (!ft_strcmp(cmd, "echo"))
 			ft_echo(argv + 1);
 		else if (!ft_strcmp(cmd, "env"))

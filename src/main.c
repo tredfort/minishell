@@ -197,8 +197,8 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, sigint_handler);
-	envp = parse_env(env);
-	init_history(get_value(env, "HOME"));
+	envp = init_envp_with_default_variables(env);
+//	init_history(get_value(env, "HOME"));
 	while (envp)
 	{
 		prompt();

@@ -27,8 +27,9 @@ static void	search_redirects(char *line, t_list **lst)
 		skip_quotes(line, &i);
 		if (line[i] && ft_strchr("<>", line[i]))
 		{
-			start = i;
-			i += 2;
+			start = i++;
+			if (line[i] == '>')
+				i++;
 			skip_spaces(line, &i);
 			while (line[i] && !ft_strchr(" <>", line[i]))
 				i++;

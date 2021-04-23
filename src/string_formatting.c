@@ -70,16 +70,22 @@ static void	swap_key_to_value(char **str, char **env)
 {
 	char	*remainder;
 	char	*tmp;
+	char	quotes;
 	int		i;
 
+	quotes = 0;
 	remainder = *str;
 	tmp = *str;
 	*str = ft_strdup("");
 	i = 0;
 	while (remainder[i])
 	{
+		if (quotes == remainder[i])
+			quotes = 0;
+		if (remainder[i] == '"')
+			quotes = remainder[i];
 		skip_shielding(remainder, &i);
-		if (remainder[i] == '\'')
+		if (remainder[i] == '\'' && !quotes)
 			skip_quotes(remainder, &i);
 		if (!remainder[i] || !remainder[i + 1] || (remainder[i] == '$'
 				&& remainder[i + 1] != '$'))

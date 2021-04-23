@@ -40,7 +40,7 @@ static char	*residue_handling(char *residue, char **line)
 
 int	get_next_line(int fd, char **line)
 {
-	static char	*residue;
+	static char	*residue = NULL;
 	char		buf[BUFFER_SIZE + 1];
 	char		*ptr_n;
 	size_t		rs;

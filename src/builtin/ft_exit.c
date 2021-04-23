@@ -12,12 +12,12 @@ void
 		ft_putstr_fd("exit: too many arguments",1);
 	else if (args && args[0])
 	{
-		save_history();
+//		save_history();
 		exit((unsigned char)ft_atoi(args[0]));
 	}
 	else
 	{
-		save_history();
+//		save_history();
 		exit(0);
 	}
 }
