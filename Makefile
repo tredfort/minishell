@@ -18,8 +18,6 @@ DIR_SRCS = src
 
 #SRCS :=		$(addprefix $(DIR_SRCS), $(SRCS))
 
-DIR_OBJS = objects
-
 SRCS =		main.c \
 			get_next_line.c \
 			ft_exec.c \
@@ -52,6 +50,8 @@ SRCS =		main.c \
 
 #SRCS :=		$(addprefix $(DIR_SRCS), $(SRCS))
 
+DIR_OBJS = objects
+
 OBJS = $(addprefix $(DIR_OBJS)/, $(SRCS:.c=.o))
 
 CC = gcc
@@ -61,18 +61,17 @@ LINUX_LIB = #-lncurses
 
 FLAGS = #-Wall -Wextra -Werror
 
-INC = -I includes/
+INC = includes
 
 DEBUG = -g
 
-all: $(LIBFT) $(NAME)
+all: $(LIBFT) $(DIR_OBJS) $(NAME)
 
-OBJ_DIRS:
-	mkdir -p objects
-	mkdir -p objects/builtin
-	mkdir -p objects/utils
+$(DIR_OBJS):
+	mkdir -p $@/builtin
+	mkdir -p $@/utils
 
-$(DIR_OBJS)/%.o:$(DIR_SRCS)/%.c includes/minishell.h OBJ_DIRS
+$(DIR_OBJS)/%.o:$(DIR_SRCS)/%.c $(INC)/minishell.h
 	$(CC) $(DEBUG) $(FLAGS) -c $< -o $@
 
 $(LIBFT):
