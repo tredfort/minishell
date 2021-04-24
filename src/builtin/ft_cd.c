@@ -17,6 +17,12 @@
 //	//	ft_putchar_fd('\n', 1);
 //}
 
+/**
+ *
+ * @param key
+ * @param value
+ * @param envp
+ */
 void	replace_value(char *key, char *value, char ***envp)
 {
 	int		i;

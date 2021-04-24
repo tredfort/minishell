@@ -12,8 +12,6 @@
 
 #include "../includes/minishell.h"
 
-int g_exit;
-
 static void	prompt(void)
 {
 	ft_putstr_fd("minishell> ", STDIN_FILENO);
@@ -182,8 +180,7 @@ void	sigint_handler(int sig_num)
 			ft_putchar_fd('\n', 2);
 		else if (sig_num == SIGQUIT)
 			ft_putstr_fd("Quit: 3\n", 2);
-		g_exit = 128 + sig_num;
-		errno = 128 + sig_num;
+		g_mini.status = 128 + sig_num;
 	}
 }
 

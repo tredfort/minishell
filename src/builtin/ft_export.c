@@ -8,8 +8,7 @@ char
 	char	*tmp;
 	char	**sort_argv;
 
-
-	sort_argv = init_envp(argv);
+	sort_argv = shall_copy_env(argv);
 	i = 0;
 	while (sort_argv[i])
 	{
@@ -32,26 +31,25 @@ char
 void
 	add_variables(char **argv, char ***envp)
 {
-	size_t	size;
-	char	**new_argv;
 	size_t	i;
+	char 	*error;
+	char 	*error_left;
 
-	size = ft_strarr_size(argv) + ft_strarr_size(*envp);
-	new_argv = ft_calloc(size + 1, sizeof(char*));
 	i = 0;
-	while (*envp && (*envp)[i])
+	while (argv && argv[i])
 	{
-		new_argv[i] = (*envp)[i];
+		if (validate_var(get_key_env_item(argv[i])))
+			add_var(argv[i], envp);
+		else
+		{
+			error_left = ft_strjoin("`", argv[i]);
+			error = ft_strjoin(error_left, "': not a valid identifier");
+			ft_strerror_fd(error, "export", 2);
+			free(error_left);
+			free(error);
+		}
 		++i;
 	}
-	while (argv && *argv)
-	{
-		new_argv[i] = ft_strdup(*argv);
-		++argv;
-		++i;
-	}
-	free(*envp);
-	*envp = new_argv;
 }
 
 void
@@ -64,13 +62,15 @@ void
 
 	if (!argv || !*argv)
 	{
+		printf("show export\n");
 		sorted_list = sort_argv(*envp);
+		printf("list sorted\n");
 		t = sorted_list;
 		while (t && *t)
 		{
-			ft_putstr_fd("declare -x ", 1);
 			key = get_key_env_item(*t);
 			value = get_value_env_item(*t);
+			ft_putstr_fd("declare -x ", 1);
 			ft_putstr_fd(key, 1);
 			if (value)
 			{

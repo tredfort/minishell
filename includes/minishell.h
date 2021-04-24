@@ -117,6 +117,9 @@ void			ft_strerror_fd(char *str_error, char *cmd, int fd);
 void			add_variables(char **argv, char ***envp);
 char			**init_envp_with_default_variables(char **env);
 int				key_exists(char	*key, char **envp);
+void			add_var(char *str, char ***env);
+int				validate_var(char *str);
+char			**shall_copy_env(char **env);
 
 /*
 ** builtin functions

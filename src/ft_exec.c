@@ -32,6 +32,7 @@ int
 	char *bin_path_slash;
 	struct stat st;
 	int pid;
+	int status;
 
 	if (path)
 	{
@@ -53,13 +54,15 @@ int
 			if (pid < 0)
 				ft_strerror_fd(strerror(errno), cmd, 1);
 		}
-		if (pid == 0 || is_child_process)
+		if (is_child_process || pid == 0)
 		{
-			//child_signals_handler();
 			execve(bin_path, argv, envp);
 		}
 		else
-			wait(0);
+		{
+			wait(&status);
+			g_mini.status = WEXITSTATUS(status);
+		}
 		return (0);
 	}
 	return (ENOENT);

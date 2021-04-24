@@ -13,10 +13,10 @@ int	key_exists(char	*key, char **envp)
 	if (envp)
 	{
 		i = -1;
-		while (envp[++i])
+		while (envp[++i] && envp[i][0])
 		{
-			if (!ft_strncmp(key, envp[i], key_len) && (!envp[i][key_len]
-				|| envp[i][key_len] == '='))
+			if (!ft_strncmp(key, envp[i], key_len)
+				&& (!envp[i][key_len] || envp[i][key_len] == '='))
 				return (i);
 		}
 	}

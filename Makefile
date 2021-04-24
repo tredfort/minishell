@@ -47,6 +47,8 @@ SRCS =		main.c \
 			utils/env_item.c \
 			utils/ft_strerror_fd.c \
 			utils/key_exists.c \
+			utils/add_var.c \
+			utils/validate_var.c \
 
 #SRCS :=		$(addprefix $(DIR_SRCS), $(SRCS))
 

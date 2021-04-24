@@ -11,10 +11,7 @@ char
 		++equal_sign_pos;
 	key = malloc(sizeof(char) * (equal_sign_pos));
 	if (!key)
-	{
-		//TODO: critical error, what are we going to do?
-		printf("\n\n/////WARNING//// MALLOC ERROR dict_item->key in function parse_dict_item\n\n");
-	}
+		exit(errno);
 	ft_memcpy(key, str, equal_sign_pos);
 	key[equal_sign_pos] = '\0';
 	return (key);

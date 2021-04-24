@@ -33,7 +33,7 @@ static void	join_not_alpha(char **remainder, char **str)
 		*str = ft_strjoin_and_free(str, "minishell");
 	else if (*(*remainder + 1) == '?')
 	{
-		number = ft_itoa(errno); // TODO: заменить на g_mini.status
+		number = ft_itoa(g_mini.status);
 		*str = ft_strjoin_and_free(str, number);
 		free(number);
 	}

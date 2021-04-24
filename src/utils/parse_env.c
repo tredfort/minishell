@@ -57,6 +57,20 @@ char	**init_envp(char **env)
 	return (envp);
 }
 
+char	**shall_copy_env(char **env)
+{
+	char **envp;
+	size_t i;
+
+	envp = ft_calloc(ft_strarr_size(env) + 1, sizeof (char*));
+	if (!envp)
+		exit(errno);
+	i = -1;
+	while(env && env[++i])
+		envp[i] = env[i];
+	return (envp);
+}
+
 char	**init_envp_with_default_variables(char **env)
 {
 	char	**my_envp;
