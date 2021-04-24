@@ -17,25 +17,42 @@
 //	//	ft_putchar_fd('\n', 1);
 //}
 
+void	replace_value(char *key, char *value, char ***envp)
+{
+	int		i;
+	char	*tmp;
+	char	*key_equal;
+
+	if (*envp)
+	{
+		i = key_exists(key, *envp);
+		if (i != -1)
+		{
+			key_equal = ft_strjoin(key, "=");
+			tmp = (*envp)[i];
+			(*envp)[i] = ft_strjoin(key_equal, value);
+			free(key_equal);
+			free(tmp);
+		}
+	}
+}
+
 void	ft_cd(char **argv, char ***envp)
 {
 	char	*pwd;
 	char	*old_pwd;
-	char	**arr;
 
 	old_pwd = getcwd(NULL, 0);
-	if (!argv && chdir(get_dict_val_by_key("HOME", *envp)) == -1)
+	if ((!argv || !*argv) && chdir(get_dict_val_by_key("HOME", *envp)) == -1)
 		ft_strerror_fd("HOME not set", "cd", STDERR_FILENO);
 	else if (argv && argv[0] && chdir(argv[0]) == -1)
 		ft_strerror_fd(strerror(errno), "cd", STDERR_FILENO);
 	else
 	{
 		pwd = getcwd(NULL, 0);
-		if (key_exists("PWD", *envp))
-			add_variables(&pwd, envp);
+		replace_value("PWD", pwd, envp);
 		free(pwd);
-		if (key_exists("OLDPWD", *envp))
-			add_variables(&old_pwd, envp);
+		replace_value("OLDPWD", old_pwd, envp);
 	}
 	free(old_pwd);
 }

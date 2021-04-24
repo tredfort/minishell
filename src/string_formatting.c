@@ -88,7 +88,7 @@ static void	swap_key_to_value(char **str, char **env)
 		if (remainder[i] == '\'' && !quotes)
 			skip_quotes(remainder, &i);
 		if (!remainder[i] || !remainder[i + 1] || (remainder[i] == '$'
-				&& remainder[i + 1] != '$'))
+				&& !ft_strchr( " $%+,./:=\\^~",remainder[i + 1])))
 			join_value(&remainder, str, env, &i);
 		else if (remainder[i])
 			i++;

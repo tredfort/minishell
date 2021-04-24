@@ -17,8 +17,8 @@ int	key_exists(char	*key, char **envp)
 		{
 			if (!ft_strncmp(key, envp[i], key_len) && (!envp[i][key_len]
 				|| envp[i][key_len] == '='))
-				return (1);
+				return (i);
 		}
 	}
-	return (0);
+	return (-1);
 }
