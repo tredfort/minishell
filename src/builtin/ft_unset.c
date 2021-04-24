@@ -46,6 +46,7 @@ void
 			ft_strerror_fd(error, "unset", 2);
 			free(error_left);
 			free(error);
+			g_mini.status = 1;
 		}
 		++argv;
 	}

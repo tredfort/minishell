@@ -47,6 +47,7 @@ void
 			ft_strerror_fd(error, "export", 2);
 			free(error_left);
 			free(error);
+			g_mini.status = 1;
 		}
 		++i;
 	}

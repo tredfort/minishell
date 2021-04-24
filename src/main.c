@@ -21,11 +21,22 @@ void stop_processes(t_list *proc_list)
 {
 	t_proc *proc;
 
+	t_list *t = proc_list;
+	while(t)
+	{
+		t_proc *p = t->content;
+		close(p->fd[1]);
+			close(p->fd[0]);
+		close(p->fd[1]);
+		t = t->next;
+	}
 	while (proc_list)
 	{
 		proc = proc_list->content;
-		close(proc->fd[0]);
-		close(proc->fd[1]);
+//		close(proc->fd[0]);
+//		close(proc->fd[1]);
+//		printf("list size %d\n", ft_lstsize(proc_list));
+//		printf("waiting for %d\n", proc->pid);
 		waitpid(proc->pid, 0, 0);
 		proc_list = proc_list->next;
 	}

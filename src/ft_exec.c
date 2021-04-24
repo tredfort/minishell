@@ -34,6 +34,7 @@ int
 	int pid;
 	int status;
 
+	status = 0;
 	if (path)
 	{
 		bin_path_slash = ft_strjoin(path, "/");
@@ -62,6 +63,9 @@ int
 		{
 			wait(&status);
 			g_mini.status = WEXITSTATUS(status);
+			if (WIFSIGNALED(status))
+				g_mini.status = 128 + WTERMSIG(status);
+//			printf("after exec mini status is %d\n", g_mini.status);
 		}
 		return (0);
 	}
