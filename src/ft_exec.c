@@ -42,12 +42,12 @@ int
 	}
 	else
 		bin_path = cmd;
-
-	if (stat(bin_path, &st) != -1 && st.st_mode & S_IXUSR)
+	if (stat(bin_path, &st) != -1 )
 	{
+		if (!(st.st_mode & S_IXUSR))
+			return EACCES;
 		if (st.st_mode & S_IFDIR)
 			return (EISDIR);
-		//errno = 0;
 		if (!is_child_process)
 		{
 			pid = fork();
@@ -61,7 +61,8 @@ int
 		else
 		{
 			wait(&status);
-			g_mini.status = WEXITSTATUS(status);
+			if (!g_mini.status_set)
+				g_mini.status = WEXITSTATUS(status);
 		}
 		return (0);
 	}
@@ -75,24 +76,44 @@ void
 	char	**paths;
 	char	**t;
 
-//	errno = 0;
-	errno = ft_exec_by_path(0, cmd, argv, envp, is_child_process);
-	if (errno && errno != EISDIR)
+	path = get_path(envp);
+	errno = 0;
+	if (!path)
+		errno = ft_exec_by_path(0, cmd, argv, envp, is_child_process);
+	else if (!strncmp(cmd, "./", 2))
+		errno = ft_exec_by_path("./", cmd, argv, envp, is_child_process);
+	else
 	{
-		path = get_path(envp);
 		paths = ft_split(path, ':');
-		free(path);
 		t = paths;
-		while (t && *t && errno && errno != EISDIR)
+		errno = 1;
+		while (t && *t && errno && errno != EISDIR && errno != EACCES)
 		{
-			errno = 0;
 			errno = ft_exec_by_path(*t, cmd, argv, envp, is_child_process);
 			++t;
 		}
 		free(paths);
 	}
-	if (errno > 0)
-		ft_strerror_fd(strerror(errno), cmd, 1);
+	if (errno == EACCES )
+	{
+		ft_strerror_fd(strerror(errno), cmd, 2);
+		if (is_child_process)
+			exit(126);
+		if (!g_mini.status_set)
+			g_mini.status = 126;
+	}
+	else if (errno > 0)
+	{
+		if (path)
+			ft_strerror_fd("command not found", cmd, 2);
+		else
+			ft_strerror_fd(strerror(errno), cmd, 2);
+		if (is_child_process)
+			exit(127);
+		if (!g_mini.status_set)
+			g_mini.status = 127;
+	}
+	free(path);
 }
 
 void

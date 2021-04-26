@@ -16,8 +16,6 @@ LIBFT =		libft/libft.a
 
 DIR_SRCS = src
 
-#SRCS :=		$(addprefix $(DIR_SRCS), $(SRCS))
-
 SRCS =		main.c \
 			get_next_line.c \
 			ft_exec.c \
