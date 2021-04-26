@@ -50,7 +50,7 @@ static t_sh	*add_new_command(char *line, int len, int pipe)
 
 	cmd = malloc(sizeof(t_sh));
 	if (!cmd)
-		exit(1);
+		exit(errno);
 	cmd->redir = NULL;
 	cmd->pipe = pipe;
 	tmp = ft_substr(line, 0, len);

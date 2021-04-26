@@ -30,6 +30,7 @@ void
 
 	i = 0;
 	flag_n = 0;
+	g_mini.status = 0;
 	while (argv[i] && is_n_flag(argv[i]))
 	{
 		flag_n = 1;

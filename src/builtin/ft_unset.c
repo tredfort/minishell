@@ -35,6 +35,7 @@ void
 	char	*error_left;
 	char	*error;
 
+	g_mini.status = 0;
 	while(argv && *argv)
 	{
 		if (validate_var(*argv))

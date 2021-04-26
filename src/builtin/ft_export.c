@@ -61,6 +61,7 @@ void
 	char	*key;
 	char 	*value;
 
+	g_mini.status = 0;
 	if (!argv || !*argv)
 	{
 		printf("show export\n");

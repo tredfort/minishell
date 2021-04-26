@@ -5,6 +5,7 @@ void
 {
 	char	**t;
 
+	g_mini.status = 0;
 	//TODO: env somehow work with env
 	(void)argv;
 	t = envp;

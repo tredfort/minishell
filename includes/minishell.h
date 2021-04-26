@@ -68,6 +68,7 @@ typedef struct s_mini
 	struct termios	basic;
 	int				status;
 	int 			*pids;
+	int 			status_set;
 } 				t_mini;
 
 t_mini		g_mini;
