@@ -53,7 +53,7 @@ int
 		{
 			pid = fork();
 			if (pid < 0)
-				ft_strerror_fd(strerror(errno), cmd, 1);
+				ft_strerror(strerror(errno), cmd);
 		}
 		if (is_child_process || pid == 0)
 		{
@@ -96,7 +96,7 @@ void
 		free(paths);
 	}
 	if (errno > 0)
-		ft_strerror_fd(strerror(errno), cmd, 1);
+		ft_strerror(strerror(errno), cmd);
 }
 
 void
@@ -109,7 +109,7 @@ void
 		else if (!ft_strcmp(cmd, "echo"))
 			ft_echo(argv + 1);
 		else if (!ft_strcmp(cmd, "env"))
-			ft_env(argv + 1, *envp);
+			ft_env(*envp);
 		else if (!ft_strcmp(cmd, "exit"))
 			ft_exit(argv + 1);
 		else if (!ft_strcmp(cmd, "export"))

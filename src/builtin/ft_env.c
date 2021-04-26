@@ -1,18 +1,14 @@
 #include "../../includes/minishell.h"
 
 void
-	ft_env(char **argv, char **envp)
+	ft_env(char **envp)
 {
-	char	**t;
+	int	i;
 
-	//TODO: env somehow work with env
-	(void)argv;
-	t = envp;
-	while (t && *t)
+	i = -1;
+	while (envp[++i])
 	{
-		//TODO:: don't show var with empty value
-		ft_putstr_fd(*t, 1);
-		ft_putchar_fd('\n', 1);
-		++t;
+		if (ft_strchr(envp[i], '='))
+			ft_putendl_fd(envp[i], STDOUT_FILENO);
 	}
 }

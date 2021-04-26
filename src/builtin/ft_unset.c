@@ -43,7 +43,7 @@ void
 		{
 			error_left = ft_strjoin("`", *argv);
 			error = ft_strjoin(error_left, "': not a valid identifier");
-			ft_strerror_fd(error, "unset", 2);
+			ft_strerror(error, "unset");
 			free(error_left);
 			free(error);
 			g_mini.status = 1;

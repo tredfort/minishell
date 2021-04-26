@@ -4,7 +4,7 @@
 ** pwd function
 ** https://man7.org/linux/man-pages/man3/getcwd.3.html
 */
-void ft_pwd()
+void	ft_pwd(void)
 {
 	char	*res;
 

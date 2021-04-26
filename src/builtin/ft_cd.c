@@ -50,9 +50,9 @@ void	ft_cd(char **argv, char ***envp)
 
 	old_pwd = getcwd(NULL, 0);
 	if ((!argv || !*argv) && chdir(get_dict_val_by_key("HOME", *envp)) == -1)
-		ft_strerror_fd("HOME not set", "cd", STDERR_FILENO);
+		ft_strerror("HOME not set", "cd");
 	else if (argv && argv[0] && chdir(argv[0]) == -1)
-		ft_strerror_fd(strerror(errno), "cd", STDERR_FILENO);
+		ft_strerror(strerror(errno), "cd");
 	else
 	{
 		pwd = getcwd(NULL, 0);

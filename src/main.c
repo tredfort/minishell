@@ -14,7 +14,7 @@
 
 static void	prompt(void)
 {
-	ft_putstr_fd("minishell> ", STDIN_FILENO);
+	ft_putstr_fd("\033[1;35mminishell> \033[0m", STDERR_FILENO);
 }
 
 void stop_processes(t_list *proc_list)
@@ -113,7 +113,7 @@ void
 					file += 1;
 				int new_fd = open(file, O_RDONLY, S_IRUSR | S_IWUSR, 0000644);
 				if (new_fd == -1)
-					ft_strerror_fd(strerror(errno), "<",1);
+					ft_strerror(strerror(errno), file);
 				//TODO:: check if dup2 succes
 				dup2(new_fd, 0);
 				close(new_fd);
@@ -126,7 +126,7 @@ void
 				int new_fd = open(file, O_CREAT | O_WRONLY | O_APPEND, 0000644);
 				if (new_fd == -1)
 					//TODO:: open didn't work
-					ft_strerror_fd(strerror(errno), ">>",1);
+					ft_strerror(strerror(errno), file);
 				//TODO:: check if dup2 succes
 				dup2(new_fd, 1);
 				close(new_fd);
@@ -140,7 +140,7 @@ void
 				//TODO:: setup right chmod
 				int new_fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 				if (new_fd == -1)
-					ft_strerror_fd(strerror(errno), ">",1);
+					ft_strerror(strerror(errno), file);
 				//TODO:: check if dup2 succes
 				dup2(new_fd, 1);
 				close(new_fd);
@@ -203,8 +203,8 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, sigint_handler);
+//	signal(SIGINT, sigint_handler);
+//	signal(SIGQUIT, sigint_handler);
 	envp = init_envp_with_default_variables(env);
 //	init_history(get_value(env, "HOME"));
 	while (envp)

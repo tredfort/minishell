@@ -3,7 +3,7 @@
 int
 	is_n_flag(char *str)
 {
-	int i;
+	int	i;
 
 	if (str[0] != '-')
 		return (0);
@@ -25,8 +25,8 @@ int
 void
 	ft_echo(char **argv)
 {
-	int i;
-	int flag_n;
+	int	i;
+	int	flag_n;
 
 	i = 0;
 	flag_n = 0;

@@ -13,19 +13,19 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define ERROR_MSG1 "minishell: syntax error near unexpected token `|'\n"
-# define ERROR_MSG2 "minishell: syntax error near unexpected token `||'\n"
-# define ERROR_MSG3 "minishell: syntax error near unexpected token `('\n"
-# define ERROR_MSG4 "minishell: syntax error near unexpected token `)'\n"
-# define ERROR_MSG5 "minishell: syntax error near unexpected token `;'\n"
-# define ERROR_MSG6 "minishell: syntax error near unexpected token `;;'\n"
-# define ERROR_MSG7 "minishell: syntax error near unexpected token `''\n"
-# define ERROR_MSG8 "minishell: syntax error near unexpected token `\"'\n"
-# define ERROR_MSG9 "minishell: syntax error near unexpected token `newline'\n"
-# define ERROR_MSG10 "minishell: syntax error near unexpected token `<'\n"
-# define ERROR_MSG11 "minishell: syntax error near unexpected token `>'\n"
-# define ERROR_MSG12 "minishell: syntax error near unexpected token `<<'\n"
-# define ERROR_MSG13 "minishell: syntax error near unexpected token `\\'\n"
+# define ERROR_MSG1 "minishell: syntax error near unexpected token `|'"
+# define ERROR_MSG2 "minishell: syntax error near unexpected token `||'"
+# define ERROR_MSG3 "minishell: syntax error near unexpected token `('"
+# define ERROR_MSG4 "minishell: syntax error near unexpected token `)'"
+# define ERROR_MSG5 "minishell: syntax error near unexpected token `;'"
+# define ERROR_MSG6 "minishell: syntax error near unexpected token `;;'"
+# define ERROR_MSG7 "minishell: syntax error near unexpected token `''"
+# define ERROR_MSG8 "minishell: syntax error near unexpected token `\"'"
+# define ERROR_MSG9 "minishell: syntax error near unexpected token `newline'"
+# define ERROR_MSG10 "minishell: syntax error near unexpected token `<'"
+# define ERROR_MSG11 "minishell: syntax error near unexpected token `>'"
+# define ERROR_MSG12 "minishell: syntax error near unexpected token `<<'"
+# define ERROR_MSG13 "minishell: syntax error near unexpected token `\\'"
 # include "../libft/libft.h"
 //TODO::remove it before mark as completed
 # include <stdio.h>
@@ -100,6 +100,7 @@ int			my_putchar(int c);
 void		clear_command_list(t_list *lst);
 void		enable_basic_mode(void);
 void		remove_shielding(char **str);
+int			is_numeric_argument(char *str);
 
 /*
 ** utils
@@ -113,7 +114,7 @@ void			del_dict_item(void *list);
 char			*get_value_env_item(char *str);
 char			*get_key_env_item(char *str);
 size_t			ft_strarr_size(char **str_arr);
-void			ft_strerror_fd(char *str_error, char *cmd, int fd);
+void			ft_strerror(char *str_error, char *cmd);
 void			add_variables(char **argv, char ***envp);
 char			**init_envp_with_default_variables(char **env);
 int				key_exists(char	*key, char **envp);
@@ -127,7 +128,7 @@ char			**shall_copy_env(char **env);
 */
 void			ft_cd(char **argv, char ***envp);
 void			ft_echo(char **argv);
-void			ft_env(char **argv, char **envp);
+void			ft_env(char **envp);
 void 			ft_exit(char **argv);
 void			ft_export(char **argv, char ***envp);
 void			ft_pwd();

@@ -14,7 +14,7 @@
 
 void	skip_shielding(const char *str, int *i)
 {
-	if (str[*i] == '\\' && str[*i + 1] && ft_strchr("'\"|\\<>$; ", str[*i + 1]))
+	if (str[*i] == '\\' && str[*i + 1])
 		*i += 2;
 }
 
@@ -41,12 +41,10 @@ char	skip_quotes(const char *str, int *i)
 		quote = str[(*i)++];
 		while (str[(*i)] && quote)
 		{
+			skip_shielding(str, i);
 			if ((str[*i] == '"' || str[*i] == '\'') && str[*i] == quote)
 				quote = 0;
-			if (str[*i] == '\\' && ft_strchr("\"|\\<>$; ", str[*i + 1]))
-				*i += 2;
-			else
-				(*i)++;
+			(*i)++;
 		}
 	}
 	return (quote);

@@ -4,15 +4,13 @@
 #include "../../includes/minishell.h"
 
 void
-	ft_strerror_fd(char *str_error, char *cmd, int fd)
+	ft_strerror(char *str_error, char *cmd)
 {
-	ft_putstr_fd("minishell", fd);
-	ft_putstr_fd(": ", fd);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	if (cmd)
 	{
-		ft_putstr_fd(cmd, fd);
-		ft_putstr_fd(": ", fd);
+		ft_putstr_fd(cmd, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
 	}
-	ft_putstr_fd(str_error, fd);
-	ft_putchar_fd('\n', fd);
+	ft_putendl_fd(str_error, STDERR_FILENO);
 }
