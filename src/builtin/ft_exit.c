@@ -12,27 +12,48 @@
 
 #include "../../includes/minishell.h"
 
-/*
-** exit function
-** https://stackoverflow.com/questions/55584465/exit-command-in-shell/55585103
-** TODO: what should I return in case of empty args?
- * TODO:: if
-*/
-void
-	ft_exit(char **args)
+int	is_numeric_argument(char *str)
 {
-	if (args && args[0] && args[1])
-		ft_putstr_fd("exit: too many arguments",1);
-	else if (args && args[0])
+	while (*str == ' ')
+		str++;
+	if (*str == '-' || *str == '+')
+		str++;
+	if (!*str)
+		return (0);
+	while (*str)
 	{
-//		save_history();
-//TODO:: ALWAys write exit before quit
+		if (!ft_isdigit(*str))
+			return (0);
+		str++;
+	}
+	return (1);
+}
 
-		exit((unsigned char)ft_atoi(args[0]));
+void	ft_exit(char **args)
+{
+	char	*error_msg;
+
+	ft_putendl_fd("exit", STDOUT_FILENO);
+	if (args && args[0])
+	{
+		if (!is_numeric_argument(args[0]))
+		{
+			error_msg = ft_strjoin(args[0], ": numeric argument required");
+			ft_strerror(error_msg, "exit");
+			free(error_msg);
+			//	save_history();
+			exit(255);
+		}
+		if (!args[1])
+		{
+			//	save_history();
+			exit((unsigned char)ft_atoi(args[0]));
+		}
+		ft_strerror("too many arguments", "exit");
 	}
 	else
 	{
-//		save_history();
+		//	save_history();
 		exit(0);
 	}
 }

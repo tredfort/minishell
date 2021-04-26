@@ -43,13 +43,12 @@ void	remove_shielding(char **str)
 	int		j;
 
 	tmp = *str;
-	*str = malloc(ft_strlen(tmp));
+	*str = ft_calloc(ft_strlen(tmp) + 1, sizeof(char));
 	if (!*str)
 		exit(errno);
 	i = 0;
 	j = 0;
 	while (tmp[i])
 		skip_shielding_and_copy(str, tmp, &i, &j);
-	(*str)[j] = '\0';
 	free(tmp);
 }

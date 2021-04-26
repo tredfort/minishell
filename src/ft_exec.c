@@ -55,7 +55,11 @@ int
 		{
 			pid = fork();
 			if (pid < 0)
-				ft_strerror_fd(strerror(errno), cmd, 2);
+				ft_strerror(strerror(errno), cmd);
+		}
+		if (is_child_process || pid == 0)
+		{
+			execve(bin_path, argv, envp);
 		}
 		execute_child_proc(pid == 0 || is_child_process, bin_path, argv, envp);
 		free(bin_path);
@@ -70,7 +74,7 @@ void
 {
 	if (errno == EACCES)
 	{
-		ft_strerror_fd(strerror(errno), cmd, 2);
+		ft_strerror(strerror(errno), cmd);
 		if (is_child_process)
 			exit(126);
 		if (!g_mini.status_set)
@@ -79,9 +83,9 @@ void
 	else if (errno > 0)
 	{
 		if (!path || !strncmp(cmd, "./", 2) || *cmd == '/')
-			ft_strerror_fd(strerror(errno), cmd, 2);
+			ft_strerror(strerror(errno), cmd);
 		else
-			ft_strerror_fd("command not found", cmd, 2);
+			ft_strerror("command not found", cmd);
 		if (is_child_process)
 			exit(127);
 		if (!g_mini.status_set)
@@ -128,7 +132,7 @@ void
 		else if (!ft_strcmp(cmd, "echo"))
 			ft_echo(argv + 1);
 		else if (!ft_strcmp(cmd, "env"))
-			ft_env(argv + 1, *envp);
+			ft_env(*envp);
 		else if (!ft_strcmp(cmd, "exit"))
 			ft_exit(argv + 1);
 		else if (!ft_strcmp(cmd, "export"))

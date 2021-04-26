@@ -66,15 +66,13 @@ static void	join_value(char **remainder, char **str, char **env, int *i)
 	}
 }
 
-static void	swap_key_to_value(char **str, char **env)
+static void	swap_key_to_value(char **str, char *remainder, char **env)
 {
-	char	*remainder;
 	char	*tmp;
 	char	quotes;
 	int		i;
 
 	quotes = 0;
-	remainder = *str;
 	tmp = *str;
 	*str = ft_strdup("");
 	i = 0;
@@ -88,7 +86,7 @@ static void	swap_key_to_value(char **str, char **env)
 		if (remainder[i] == '\'' && !quotes)
 			skip_quotes(remainder, &i);
 		if (!remainder[i] || !remainder[i + 1] || (remainder[i] == '$'
-				&& !ft_strchr( " $%+,./:=\\^~",remainder[i + 1])))
+				&& !ft_strchr(" $%+,./:=\\^~", remainder[i + 1])))
 			join_value(&remainder, str, env, &i);
 		else if (remainder[i])
 			i++;
@@ -105,18 +103,16 @@ void	string_formatting(t_list *lst, char **env)
 	while (lst)
 	{
 		cmd = lst->content;
-		i = 0;
-		while (cmd->argv && cmd->argv[i])
+		i = -1;
+		while (cmd->argv && cmd->argv[++i])
 		{
-			swap_key_to_value(&cmd->argv[i], env);
-			if (!ft_strcmp(cmd->argv[0], "export"))
-				break ;
-			remove_shielding(&cmd->argv[i++]);
+			swap_key_to_value(&cmd->argv[i], cmd->argv[i], env);
+			remove_shielding(&cmd->argv[i]);
 		}
 		rd = cmd->redir;
 		while (rd)
 		{
-			swap_key_to_value((char **)&rd->content, env);
+			swap_key_to_value((char **)&rd->content, (char *)&rd->content, env);
 			remove_shielding((char **)&rd->content);
 			rd = rd->next;
 		}

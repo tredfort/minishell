@@ -16,17 +16,11 @@ char	*increase_sh_level(char *value)
 {
 	char	*number;
 	char	*shlvl;
-	int		i;
+	int 	i;
 	int		level;
 
-	i = -1;
-	if (!*value)
-		return (ft_strdup("SHLVL="));
-	while (value[++i])
-	{
-		if (!ft_isdigit(value[i]))
-			return (ft_strdup("SHLVL=1"));
-	}
+	if (!is_numeric_argument(value))
+		return (ft_strdup("SHLVL=1"));
 	level = ft_atoi(value);
 	if (level >= 999)
 		return (ft_strdup("SHLVL="));

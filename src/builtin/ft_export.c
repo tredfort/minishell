@@ -58,7 +58,7 @@ void
 		{
 			error_left = ft_strjoin("`", argv[i]);
 			error = ft_strjoin(error_left, "': not a valid identifier");
-			ft_strerror_fd(error, "export", 2);
+			ft_strerror(error, "export");
 			free(error_left);
 			free(error);
 			g_mini.status = 1;

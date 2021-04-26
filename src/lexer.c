@@ -48,7 +48,7 @@ static void	is_sintax_error2(char *line, char prev, char **error)
 			|| !after_spaces(line + 2)))
 		*error = ERROR_MSG2;
 	else if (*line == '|' && (ft_strchr("<>|;", prev)
-			|| !after_spaces(line + 1)))
+			|| ft_strchr("#", after_spaces(line + 1))))
 		*error = ERROR_MSG1;
 	else if (!ft_strncmp(line, "<<", 2))
 		*error = ERROR_MSG12;
@@ -80,6 +80,6 @@ int	lexer(char *line)
 	}
 	if (!error)
 		return (0);
-	ft_putstr_fd(error, STDOUT_FILENO);
+	ft_putendl_fd(error, STDERR_FILENO);
 	return (1);
 }

@@ -1,17 +1,15 @@
 #include "../../includes/minishell.h"
 
 void
-	ft_env(char **argv, char **envp)
+	ft_env(char **envp)
 {
-	char	**t;
+	int	i;
 
 	g_mini.status = 0;
-	(void)argv;
-	t = envp;
-	while (t && *t)
+	i = -1;
+	while (envp[++i])
 	{
-		ft_putstr_fd(*t, 1);
-		ft_putchar_fd('\n', 1);
-		++t;
+		if (ft_strchr(envp[i], '='))
+			ft_putendl_fd(envp[i], STDOUT_FILENO);
 	}
 }

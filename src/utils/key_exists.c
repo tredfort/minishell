@@ -18,7 +18,7 @@ int
 	int	i;
 	int	key_len;
 
-	key_len = ft_strlen(key);
+	key_len = (int)ft_strlen(key);
 	if (envp)
 	{
 		i = -1;

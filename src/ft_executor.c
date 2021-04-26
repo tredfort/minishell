@@ -76,7 +76,7 @@ int
 		|| dup2(new_fd, flags != O_RDONLY) == -1
 		|| close(new_fd) == -1)
 	{
-		ft_strerror_fd(strerror(errno), file, 2);
+		ft_strerror(strerror(errno), file);
 		return (-1);
 	}
 	return (0);

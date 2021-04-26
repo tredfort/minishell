@@ -15,7 +15,6 @@
 
 void	*ft_calloc(size_t count, size_t size)
 {
-	return calloc(count,size);
 	char	*new;
 	size_t	total;
 	size_t	i;
