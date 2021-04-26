@@ -52,7 +52,7 @@ int
 		{
 			pid = fork();
 			if (pid < 0)
-				ft_strerror_fd(strerror(errno), cmd, 1);
+				ft_strerror_fd(strerror(errno), cmd, 2);
 		}
 		if (is_child_process || pid == 0)
 		{

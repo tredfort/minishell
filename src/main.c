@@ -139,7 +139,7 @@ int
 	int new_fd = open(file, flags, 0644);
 	if (new_fd == -1 || dup2(new_fd, 0) == -1 || close(new_fd) == -1)
 	{
-		ft_strerror_fd(strerror(errno), file, 1);
+		ft_strerror_fd(strerror(errno), file, 2);
 		return (-1);
 	}
 	return (0);
