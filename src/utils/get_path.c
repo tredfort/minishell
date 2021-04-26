@@ -1,33 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   key_exists.c                                       :+:      :+:    :+:   */
+/*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smephest <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/26 23:31:19 by smephest          #+#    #+#             */
-/*   Updated: 2021/04/26 23:31:30 by smephest         ###   ########.fr       */
+/*   Created: 2021/04/27 00:02:07 by smephest          #+#    #+#             */
+/*   Updated: 2021/04/27 00:02:08 by smephest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int
-	key_exists(char	*key, char **envp)
+char
+	*get_path(char **envp)
 {
-	int	i;
-	int	key_len;
+	char	**t;
+	char	*key;
 
-	key_len = ft_strlen(key);
-	if (envp)
+	t = envp;
+	while (t && *t)
 	{
-		i = -1;
-		while (envp[++i] && envp[i][0])
+		key = get_key_env_item(*t);
+		if (!ft_strcmp(key, "PATH"))
 		{
-			if (!ft_strncmp(key, envp[i], key_len)
-				&& (!envp[i][key_len] || envp[i][key_len] == '='))
-				return (i);
+			free(key);
+			return (get_value_env_item(*t));
 		}
+		free(key);
+		++t;
 	}
-	return (-1);
+	return (0);
 }

@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: smephest <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/26 23:35:53 by smephest          #+#    #+#             */
+/*   Updated: 2021/04/26 23:36:17 by smephest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 void
 	unset_var(char *var, char ***env)
 {
 	char	**t;
-	size_t 	key_len;
+	size_t	key_len;
 	char	*key;
 
 	t = *env;
@@ -36,7 +48,7 @@ void
 	char	*error;
 
 	g_mini.status = 0;
-	while(argv && *argv)
+	while (argv && *argv)
 	{
 		if (validate_var(*argv))
 			unset_var(*argv, envp);

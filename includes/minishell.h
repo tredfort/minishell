@@ -87,6 +87,7 @@ void		skip_shielding(const char *str, int *i);
 void		skip_spaces(const char *str, int *i);
 char		*get_value(char **env, char *key);
 void		ft_exec(char *cmd, char **argv, char ***envp, int is_child_process);
+void		ft_executor(t_list *lst, char ***envp);
 
 void		init_history(char *path);
 void		save_history(void);
@@ -121,6 +122,7 @@ int				key_exists(char	*key, char **envp);
 void			add_var(char *str, char ***env);
 int				validate_var(char *str);
 char			**shall_copy_env(char **env);
+char			*get_path(char **envp);
 
 /*
 ** builtin functions

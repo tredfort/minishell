@@ -5,34 +5,10 @@
 #include "../includes/minishell.h"
 
 char
-	*get_path(char **envp)
+	*get_bin_path(char *path, char *cmd)
 {
-	char	**t;
-	char 	*key;
-
-	t = envp;
-	while(t && *t)
-	{
-		key = get_key_env_item(*t);
-		if (!ft_strcmp(key, "PATH"))
-		{
-			free(key);
-			return (get_value_env_item(*t));
-		}
-		free(key);
-		++t;
-	}
-	return (0);
-}
-
-int
-	ft_exec_by_path(char *path, char *cmd, char **argv, char **envp, int is_child_process)
-{
-	char *bin_path;
-	char *bin_path_slash;
-	struct stat st;
-	int pid;
-	int status;
+	char		*bin_path;
+	char		*bin_path_slash;
 
 	if (path)
 	{
@@ -42,10 +18,40 @@ int
 	}
 	else
 		bin_path = cmd;
+	return (bin_path);
+}
+
+void
+	some_function(int is_child_process,
+			char *bin_path, char **argv, char **envp)
+{
+	int	status;
+
+	if (is_child_process)
+		execve(bin_path, argv, envp);
+	else
+	{
+		wait(&status);
+		if (!g_mini.status_set)
+			g_mini.status = WEXITSTATUS(status);
+	}
+}
+
+int
+	ft_exec_by_path(char *path,
+			char **argv, char **envp, int is_child_process)
+{
+	char		*bin_path;
+	struct stat	st;
+	int			pid;
+	char		*cmd;
+
+	cmd = argv[0];
+	bin_path = get_bin_path(path, cmd);
 	if (stat(bin_path, &st) != -1 )
 	{
 		if (!(st.st_mode & S_IXUSR))
-			return EACCES;
+			return (EACCES);
 		if (st.st_mode & S_IFDIR)
 			return (EISDIR);
 		if (!is_child_process)
@@ -54,45 +60,16 @@ int
 			if (pid < 0)
 				ft_strerror_fd(strerror(errno), cmd, 2);
 		}
-		if (is_child_process || pid == 0)
-		{
-			execve(bin_path, argv, envp);
-		}
-		else
-		{
-			wait(&status);
-			if (!g_mini.status_set)
-				g_mini.status = WEXITSTATUS(status);
-		}
+		some_function(pid == 0 || is_child_process, bin_path, argv, envp);
 		return (0);
 	}
 	return (ENOENT);
 }
 
 void
-	ft_exec_from_path(char *cmd, char **argv, char **envp, int is_child_process)
+	ft_exec_show_error(char *cmd, char *path, int is_child_process)
 {
-	char	*path;
-	char	**paths;
-	char	**t;
-
-	path = get_path(envp);
-	errno = 0;
-	if (!path || !strncmp(cmd, "./", 2) || *cmd == '/')
-		errno = ft_exec_by_path(0, cmd, argv, envp, is_child_process);
-	else
-	{
-		paths = ft_split(path, ':');
-		t = paths;
-		errno = 1;
-		while (t && *t && errno && errno != EISDIR && errno != EACCES)
-		{
-			errno = ft_exec_by_path(*t, cmd, argv, envp, is_child_process);
-			++t;
-		}
-		free(paths);
-	}
-	if (errno == EACCES )
+	if (errno == EACCES)
 	{
 		ft_strerror_fd(strerror(errno), cmd, 2);
 		if (is_child_process)
@@ -111,6 +88,34 @@ void
 		if (!g_mini.status_set)
 			g_mini.status = 127;
 	}
+}
+
+void
+	ft_exec_from_path(char **argv, char **envp, int is_child_process)
+{
+	char	*path;
+	char	**paths;
+	char	**t;
+	char	*cmd;
+
+	cmd = argv[0];
+	path = get_path(envp);
+	errno = 0;
+	if (!path || !strncmp(cmd, "./", 2) || *cmd == '/')
+		errno = ft_exec_by_path(0, argv, envp, is_child_process);
+	else
+	{
+		paths = ft_split(path, ':');
+		t = paths;
+		errno = 1;
+		while (t && *t && errno && errno != EISDIR && errno != EACCES)
+		{
+			errno = ft_exec_by_path(*t, argv, envp, is_child_process);
+			++t;
+		}
+		free(paths);
+	}
+	ft_exec_show_error(cmd, path, is_child_process);
 	free(path);
 }
 
@@ -134,7 +139,7 @@ void
 		else if (!ft_strcmp(cmd, "unset"))
 			ft_unset(argv + 1, envp);
 		else
-			ft_exec_from_path(cmd, argv, *envp, is_child_process);
+			ft_exec_from_path(argv, *envp, is_child_process);
 	}
 	if (is_child_process)
 		exit(0);

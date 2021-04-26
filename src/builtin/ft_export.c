@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: smephest <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/26 23:36:36 by smephest          #+#    #+#             */
+/*   Updated: 2021/04/26 23:40:58 by smephest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 char
@@ -25,15 +37,15 @@ char
 		}
 		++i;
 	}
-	return sort_argv;
+	return (sort_argv);
 }
 
 void
 	add_variables(char **argv, char ***envp)
 {
 	size_t	i;
-	char 	*error;
-	char 	*error_left;
+	char	*error;
+	char	*error_left;
 
 	i = 0;
 	while (argv && argv[i])
@@ -54,36 +66,41 @@ void
 }
 
 void
+	print_item(char *item)
+{
+	char	*key;
+	char	*value;
+
+	key = get_key_env_item(item);
+	value = get_value_env_item(item);
+	ft_putstr_fd("declare -x ", 1);
+	ft_putstr_fd(key, 1);
+	if (value)
+	{
+		ft_putstr_fd("=\"", 1);
+		ft_putstr_fd(value, 1);
+		ft_putstr_fd("\"", 1);
+		free(value);
+	}
+	if (key)
+		free(key);
+	ft_putchar_fd('\n', 1);
+}
+
+void
 	ft_export(char **argv, char ***envp)
 {
 	char	**sorted_list;
 	char	**t;
-	char	*key;
-	char 	*value;
 
 	g_mini.status = 0;
 	if (!argv || !*argv)
 	{
-		printf("show export\n");
 		sorted_list = sort_argv(*envp);
-		printf("list sorted\n");
 		t = sorted_list;
 		while (t && *t)
 		{
-			key = get_key_env_item(*t);
-			value = get_value_env_item(*t);
-			ft_putstr_fd("declare -x ", 1);
-			ft_putstr_fd(key, 1);
-			if (value)
-			{
-				ft_putstr_fd("=\"", 1);
-				ft_putstr_fd(value, 1);
-				ft_putstr_fd("\"", 1);
-				free(value);
-			}
-			if (key)
-				free(key);
-			ft_putchar_fd('\n', 1);
+			print_item(*t);
 			++t;
 		}
 		free(sorted_list);

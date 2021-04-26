@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   remove_item_from_array.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: smephest <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/26 23:32:56 by smephest          #+#    #+#             */
+/*   Updated: 2021/04/26 23:33:10 by smephest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 void
@@ -9,19 +21,17 @@ void
 
 	t = *root;
 	i = 0;
-	while(t[i])
+	while (t[i])
 	{
 		key = get_key_env_item(t[i]);
-//		printf("key %s del_item %s\n", key, del_item);
 		if (!strcmp(key, del_item))
 		{
-//			printf("founded by key %s\n", key);
-			while(t[i])
+			while (t[i])
 			{
 				t[i] = t[i + 1];
 				++i;
 			}
-			break;
+			break ;
 		}
 		free(key);
 		++i;

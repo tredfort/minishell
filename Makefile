@@ -19,6 +19,7 @@ DIR_SRCS = src
 SRCS =		main.c \
 			get_next_line.c \
 			ft_exec.c \
+			ft_executor.c \
 			command_call_history.c \
 			lexer.c \
             parser.c \
@@ -47,6 +48,7 @@ SRCS =		main.c \
 			utils/key_exists.c \
 			utils/add_var.c \
 			utils/validate_var.c \
+			utils/get_path.c \
 
 #SRCS :=		$(addprefix $(DIR_SRCS), $(SRCS))
 

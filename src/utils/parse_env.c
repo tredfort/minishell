@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_env.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: smephest <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/26 23:31:48 by smephest          #+#    #+#             */
+/*   Updated: 2021/04/26 23:32:47 by smephest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 char	*increase_sh_level(char *value)
 {
 	char	*number;
 	char	*shlvl;
-	int 	i;
+	int		i;
 	int		level;
 
 	i = -1;
@@ -52,21 +64,21 @@ char	**init_envp(char **env)
 	if (!envp)
 		exit(errno);
 	i = -1;
-	while(env && env[++i])
-			envp[i] = ft_strdup(env[i]);
+	while (env && env[++i])
+		envp[i] = ft_strdup(env[i]);
 	return (envp);
 }
 
 char	**shall_copy_env(char **env)
 {
-	char **envp;
-	size_t i;
+	char	**envp;
+	size_t	i;
 
-	envp = ft_calloc(ft_strarr_size(env) + 1, sizeof (char*));
+	envp = ft_calloc(ft_strarr_size(env) + 1, sizeof (char *));
 	if (!envp)
 		exit(errno);
 	i = -1;
-	while(env && env[++i])
+	while (env && env[++i])
 		envp[i] = env[i];
 	return (envp);
 }
