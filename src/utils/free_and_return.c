@@ -1,25 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_processes.c                                   :+:      :+:    :+:   */
+/*   free_and_return.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smephest <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/27 23:06:25 by smephest          #+#    #+#             */
-/*   Updated: 2021/04/27 23:06:33 by smephest         ###   ########.fr       */
+/*   Created: 2021/04/27 23:20:34 by smephest          #+#    #+#             */
+/*   Updated: 2021/04/27 23:22:23 by smephest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void
-	free_list_item(t_proc *item)
+int
+	free_and_return(char **str, int status)
 {
-	free(item);
-}
-
-void
-	free_processes(t_list **t)
-{
-	ft_lstclear(t, (void (*)(void *))free_list_item);
+	free(*str);
+	return (status);
 }

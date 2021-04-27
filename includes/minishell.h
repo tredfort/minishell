@@ -131,6 +131,7 @@ void			replace_fd_back(int *init_fd);
 void			crutch(int *redir_flag);
 void			ft_free_str_arr(char **str);
 void			free_processes(t_list **t);
+int				free_and_return(char **str, int status);
 
 /*
 ** builtin functions

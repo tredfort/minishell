@@ -6,7 +6,7 @@
 /*   By: smephest <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 23:31:48 by smephest          #+#    #+#             */
-/*   Updated: 2021/04/26 23:32:47 by smephest         ###   ########.fr       */
+/*   Updated: 2021/04/27 23:02:34 by smephest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*increase_sh_level(char *value)
 {
 	char	*number;
 	char	*shlvl;
-	int 	i;
+	int		i;
 	int		level;
 
 	if (!is_numeric_argument(value))

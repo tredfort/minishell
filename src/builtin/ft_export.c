@@ -6,7 +6,7 @@
 /*   By: smephest <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 23:36:36 by smephest          #+#    #+#             */
-/*   Updated: 2021/04/26 23:40:58 by smephest         ###   ########.fr       */
+/*   Updated: 2021/04/27 23:12:51 by smephest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void
 	size_t	i;
 	char	*error;
 	char	*error_left;
-	char 	*key;
+	char	*key;
 
 	i = 0;
 	while (argv && argv[i])

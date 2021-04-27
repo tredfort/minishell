@@ -53,6 +53,7 @@ SRCS =		main.c \
 			utils/ft_fd_helper.c \
 			utils/ft_free_str_arr.c \
 			utils/free_processes.c \
+			utils/free_and_return.c \
 
 #SRCS :=		$(addprefix $(DIR_SRCS), $(SRCS))
 

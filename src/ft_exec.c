@@ -6,7 +6,7 @@
 /*   By: smephest <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 20:15:30 by smephest          #+#    #+#             */
-/*   Updated: 2021/04/27 20:15:31 by smephest         ###   ########.fr       */
+/*   Updated: 2021/04/27 23:20:10 by smephest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,9 @@ int
 	if (stat(bin_path, &st) != -1 )
 	{
 		if (!(st.st_mode & S_IXUSR))
-		{
-			free(bin_path);
-			return (EACCES);
-		}
+			return (free_and_return(&bin_path, EACCES));
 		if (st.st_mode & S_IFDIR)
-		{
-			free(bin_path);
-			return (EISDIR);
-		}
+			return (free_and_return(&bin_path, EISDIR));
 		if (!is_child_process)
 		{
 			pid = fork();
@@ -58,15 +52,11 @@ int
 				ft_strerror(strerror(errno), cmd);
 		}
 		if (is_child_process || pid == 0)
-		{
 			execve(bin_path, argv, envp);
-		}
 		execute_child_proc(pid == 0 || is_child_process, bin_path, argv, envp);
-		free(bin_path);
-		return (0);
+		return (free_and_return(&bin_path, 0));
 	}
-	free(bin_path);
-	return (ENOENT);
+	return (free_and_return(&bin_path, ENOENT));
 }
 
 void
