@@ -20,6 +20,7 @@ SRCS =		main.c \
 			get_next_line.c \
 			ft_exec.c \
 			ft_executor.c \
+			ft_pipe.c \
 			command_call_history.c \
 			lexer.c \
             parser.c \
@@ -41,7 +42,6 @@ SRCS =		main.c \
 			builtin/ft_unset.c \
 			utils/parse_env.c \
 			utils/get_home_from_env.c \
-			utils/del_list_item.c \
 			utils/remove_item_from_array.c \
 			utils/env_item.c \
 			utils/ft_strerror_fd.c \
@@ -49,6 +49,8 @@ SRCS =		main.c \
 			utils/add_var.c \
 			utils/validate_var.c \
 			utils/get_path.c \
+			utils/get_bin_path.c \
+			utils/ft_fd_helper.c \
 
 #SRCS :=		$(addprefix $(DIR_SRCS), $(SRCS))
 

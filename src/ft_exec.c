@@ -1,25 +1,16 @@
-//
-// Created by Shandy Mephesto on 4/6/21.
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_exec.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: smephest <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/27 20:15:30 by smephest          #+#    #+#             */
+/*   Updated: 2021/04/27 20:15:31 by smephest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char
-	*get_bin_path(char *path, char *cmd)
-{
-	char		*bin_path;
-	char		*bin_path_slash;
-
-	if (path)
-	{
-		bin_path_slash = ft_strjoin(path, "/");
-		bin_path = ft_strjoin(bin_path_slash, cmd);
-		free(bin_path_slash);
-	}
-	else
-		bin_path = cmd;
-	return (bin_path);
-}
 
 void
 	some_function(int is_child_process,
