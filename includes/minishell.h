@@ -88,6 +88,7 @@ void		skip_spaces(const char *str, int *i);
 char		*get_value(char **env, char *key);
 void		ft_exec(char *cmd, char **argv, char ***envp, int is_child_process);
 void		ft_executor(t_list *lst, char ***envp);
+void		ft_pipe(t_sh *temp, char ***envp, t_list **process);
 
 void		init_history(char *path);
 void		save_history(void);
@@ -123,6 +124,12 @@ void			add_var(char *str, char ***env);
 int				validate_var(char *str);
 char			**shall_copy_env(char **env);
 char			*get_path(char **envp);
+char			*get_bin_path(char *path, char *cmd);
+int				init_fd_arr(int *init_fd);
+void			replace_fd_back(int *init_fd);
+void			crutch(int *redir_flag);
+void			ft_free_str_arr(char **str);
+void			free_processes(t_list **t);
 
 /*
 ** builtin functions

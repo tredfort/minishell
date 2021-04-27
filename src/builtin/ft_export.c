@@ -46,11 +46,13 @@ void
 	size_t	i;
 	char	*error;
 	char	*error_left;
+	char 	*key;
 
 	i = 0;
 	while (argv && argv[i])
 	{
-		if (validate_var(get_key_env_item(argv[i])))
+		key = get_key_env_item(argv[i]);
+		if (validate_var(key))
 			add_var(argv[i], envp);
 		else
 		{
@@ -61,6 +63,7 @@ void
 			free(error);
 			g_mini.status = 1;
 		}
+		free(key);
 		++i;
 	}
 }
