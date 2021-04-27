@@ -129,6 +129,7 @@ int				init_fd_arr(int *init_fd);
 void			replace_fd_back(int *init_fd);
 void			crutch(int *redir_flag);
 void			ft_free_str_arr(char **str);
+void			free_processes(t_list **t);
 
 /*
 ** builtin functions

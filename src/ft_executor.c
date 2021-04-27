@@ -13,13 +13,13 @@
 #include "../includes/minishell.h"
 
 void
-	stop_processes(t_list *proc_list)
+	stop_processes(t_list **proc_list)
 {
 	t_proc	*proc;
 	int		status;
 	t_list	*t;
 
-	t = proc_list;
+	t = *proc_list;
 	while (t)
 	{
 		proc = t->content;
@@ -27,15 +27,16 @@ void
 		close(proc->fd[1]);
 		t = t->next;
 	}
-	while (proc_list)
+	t = *proc_list;
+	while (t)
 	{
-		proc = proc_list->content;
+		proc = t->content;
 		waitpid(proc->pid, &status, 0);
 		if (!g_mini.status_set && WIFEXITED(status))
 			g_mini.status = WEXITSTATUS(status);
-		proc_list = proc_list->next;
+		t = t->next;
 	}
-	free(proc_list);
+	free_processes(proc_list);
 }
 
 int
@@ -82,7 +83,7 @@ int
 }
 
 void
-	ft_exec_cmd(t_sh *cmd, t_list *process, char ***envp)
+	ft_exec_cmd(t_sh *cmd, t_list **process, char ***envp)
 {
 	int		init_fd[2];
 	int		redir_flag;
@@ -101,7 +102,7 @@ void
 	if (redir_flag != -1 && cmd->argv)
 	{
 		if (cmd->pipe || process != 0)
-			ft_pipe(cmd, envp, &process);
+			ft_pipe(cmd, envp, process);
 		else
 			ft_exec(cmd->argv[0], cmd->argv, envp, 0);
 	}
@@ -117,9 +118,9 @@ void
 	process = 0;
 	while (lst)
 	{
-		ft_exec_cmd(lst->content, process, envp);
+		ft_exec_cmd(lst->content, &process, envp);
 		lst = lst->next;
 	}
 	if (process != 0)
-		stop_processes(process);
+		stop_processes(&process);
 }
