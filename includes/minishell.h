@@ -128,6 +128,7 @@ char			*get_bin_path(char *path, char *cmd);
 int				init_fd_arr(int *init_fd);
 void			replace_fd_back(int *init_fd);
 void			crutch(int *redir_flag);
+void			ft_free_str_arr(char **str);
 
 /*
 ** builtin functions

@@ -19,10 +19,16 @@ void
 	char	**new_t;
 	char	**new;
 	size_t	i;
+	char *key;
 
-	i = key_exists(get_key_env_item(str), *env);
+	key = get_key_env_item(str);
+	i = key_exists(key, *env);
+	free(key);
 	if (i != -1)
+	{
+		free((*env)[i]);
 		(*env)[i] = ft_strdup(str);
+	}
 	else
 	{
 		t = *env;
@@ -35,6 +41,7 @@ void
 			++t;
 		}
 		*new_t = ft_strdup(str);
+		free(*env);
 		*env = new;
 	}
 }

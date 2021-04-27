@@ -51,6 +51,7 @@ SRCS =		main.c \
 			utils/get_path.c \
 			utils/get_bin_path.c \
 			utils/ft_fd_helper.c \
+			utils/ft_free_str_arr.c \
 
 #SRCS :=		$(addprefix $(DIR_SRCS), $(SRCS))
 

@@ -13,8 +13,8 @@
 #include "../includes/minishell.h"
 
 void
-	some_function(int is_child_process,
-			char *bin_path, char **argv, char **envp)
+	execute_child_proc(int is_child_process,
+					   char *bin_path, char **argv, char **envp)
 {
 	int	status;
 
@@ -42,18 +42,26 @@ int
 	if (stat(bin_path, &st) != -1 )
 	{
 		if (!(st.st_mode & S_IXUSR))
+		{
+			free(bin_path);
 			return (EACCES);
+		}
 		if (st.st_mode & S_IFDIR)
+		{
+			free(bin_path);
 			return (EISDIR);
+		}
 		if (!is_child_process)
 		{
 			pid = fork();
 			if (pid < 0)
 				ft_strerror_fd(strerror(errno), cmd, 2);
 		}
-		some_function(pid == 0 || is_child_process, bin_path, argv, envp);
+		execute_child_proc(pid == 0 || is_child_process, bin_path, argv, envp);
+		free(bin_path);
 		return (0);
 	}
+	free(bin_path);
 	return (ENOENT);
 }
 
@@ -104,7 +112,7 @@ void
 			errno = ft_exec_by_path(*t, argv, envp, is_child_process);
 			++t;
 		}
-		free(paths);
+		ft_free_str_arr(paths);
 	}
 	ft_exec_show_error(cmd, path, is_child_process);
 	free(path);
