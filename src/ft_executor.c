@@ -99,11 +99,11 @@ void
 			crutch(&redir_flag);
 		redir = redir->next;
 	}
-	if (redir_flag != -1 && cmd->argv)
+	if (cmd->argv)
 	{
 		if (cmd->pipe || process != 0)
-			ft_pipe(cmd, envp, process);
-		else
+			ft_pipe(cmd, envp, process, redir_flag);
+		else if (redir_flag != -1)
 			ft_exec(cmd->argv[0], cmd->argv, envp, 0);
 	}
 	if (redir_flag != 0)
@@ -119,8 +119,8 @@ void
 	while (lst)
 	{
 		ft_exec_cmd(lst->content, &process, envp);
+		if (process != 0 && !((t_sh *) lst->content)->pipe)
+			stop_processes(&process);
 		lst = lst->next;
 	}
-	if (process != 0)
-		stop_processes(&process);
 }

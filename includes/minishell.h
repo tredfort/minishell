@@ -88,7 +88,7 @@ void		skip_spaces(const char *str, int *i);
 char		*get_value(char **env, char *key);
 void		ft_exec(char *cmd, char **argv, char ***envp, int is_child_process);
 void		ft_executor(t_list *lst, char ***envp);
-void		ft_pipe(t_sh *temp, char ***envp, t_list **process);
+void		ft_pipe(t_sh *temp, char ***envp, t_list **process, int redir_flag);
 
 void		init_history(char *path);
 void		save_history(void);

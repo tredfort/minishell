@@ -42,8 +42,8 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-//	signal(SIGINT, sigint_handler);
-//	signal(SIGQUIT, sigint_handler);
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, sigint_handler);
 	envp = init_envp_with_default_variables(env);
 //	init_history(get_value(env, "HOME"));
 	while (envp)

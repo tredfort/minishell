@@ -31,18 +31,20 @@ void
 }
 
 void
-	ft_pipe(t_sh *temp, char ***envp, t_list **process)
+	ft_pipe(t_sh *temp, char ***envp, t_list **process, int redir_flag)
 {
 	t_proc	*proc;
 
 	proc = ft_calloc(1, sizeof(t_proc));
 	if (!proc || pipe(proc->fd) == -1)
 		exit(errno);
-	proc->pid = fork();
-	if (proc->pid == -1)
-		exit(errno);
-	if (proc->pid == 0)
-		ft_exec_pipe(temp, envp, process, proc);
-	else
-		ft_lstadd_back(process, ft_lstnew(proc));
+	if (redir_flag != -1)
+	{
+		proc->pid = fork();
+		if (proc->pid == -1)
+			exit(errno);
+		if (proc->pid == 0)
+			ft_exec_pipe(temp, envp, process, proc);
+	}
+	ft_lstadd_back(process, ft_lstnew(proc));
 }
