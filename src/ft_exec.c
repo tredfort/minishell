@@ -72,7 +72,8 @@ void
 	}
 	else if (errno > 0)
 	{
-		if (!path || !strncmp(cmd, "./", 2) || *cmd == '/')
+		if (!path || !strncmp(cmd, "./", 2) || !strncmp(cmd, "../", 3)
+			|| *cmd == '/')
 			ft_strerror(strerror(errno), cmd);
 		else
 			ft_strerror("command not found", cmd);
@@ -94,7 +95,8 @@ void
 	cmd = argv[0];
 	path = get_path(envp);
 	errno = 0;
-	if (!path || !strncmp(cmd, "./", 2) || *cmd == '/')
+	if (!path || !strncmp(cmd, "./", 2) || !strncmp(cmd, "../", 3)
+		|| *cmd == '/')
 		errno = ft_exec_by_path(0, argv, envp, is_child_process);
 	else
 	{

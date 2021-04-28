@@ -41,7 +41,6 @@ static void	end_of_file(char *line)
 {
 	if (!ft_strlen(line))
 	{
-		ft_putendl_fd("exit", STDIN_FILENO);
 		enable_basic_mode();
 		ft_exit(NULL);
 	}

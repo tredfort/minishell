@@ -50,6 +50,7 @@ void	ft_exit(char **args)
 			exit((unsigned char)ft_atoi(args[0]));
 		}
 		ft_strerror("too many arguments", "exit");
+		g_mini.status = 1;
 	}
 	else
 	{

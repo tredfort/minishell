@@ -81,5 +81,6 @@ int	lexer(char *line)
 	if (!error)
 		return (0);
 	ft_putendl_fd(error, STDERR_FILENO);
+	g_mini.status = 258;
 	return (1);
 }

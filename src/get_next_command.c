@@ -27,9 +27,9 @@ static void	enable_custom_mode(char *term_name)
 	user.c_lflag &= ~(ISIG);
 	user.c_lflag &= ~(ICANON);
 	tcsetattr(STDIN_FILENO, TCSANOW, &user);
-	if (!term_name)
+	if (!term_name || !*term_name)
 		term_name = getenv("TERM");
-	if (!term_name)
+	if (!term_name || !*term_name)
 		term_name = "xterm-256color";
 	if (tgetent(STDIN_FILENO, term_name) < 1)
 		exit(errno);

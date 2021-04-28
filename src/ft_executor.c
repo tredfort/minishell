@@ -101,7 +101,7 @@ void
 	}
 	if (redir_flag != -1 && cmd->argv)
 	{
-		if (cmd->pipe || process != 0)
+		if (cmd->pipe || *process != 0)
 			ft_pipe(cmd, envp, process);
 		else
 			ft_exec(cmd->argv[0], cmd->argv, envp, 0);

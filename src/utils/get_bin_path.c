@@ -25,6 +25,6 @@ char
 		free(bin_path_slash);
 	}
 	else
-		bin_path = cmd;
+		bin_path = ft_strdup(cmd);
 	return (bin_path);
 }

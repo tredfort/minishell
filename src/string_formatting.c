@@ -88,7 +88,7 @@ static void	swap_key_to_value(char **str, char *remainder, char **env)
 		if (!remainder[i] || !remainder[i + 1] || (remainder[i] == '$'
 				&& !ft_strchr(" $%+,./:=\\^~", remainder[i + 1])))
 			join_value(&remainder, str, env, &i);
-		else if (remainder[i])
+		else if (remainder[i] && remainder[i] != '\\')
 			i++;
 	}
 	free(tmp);
@@ -112,7 +112,7 @@ void	string_formatting(t_list *lst, char **env)
 		rd = cmd->redir;
 		while (rd)
 		{
-			swap_key_to_value((char **)&rd->content, (char *)&rd->content, env);
+			swap_key_to_value((char **)&rd->content, (char *)rd->content, env);
 			remove_shielding((char **)&rd->content);
 			rd = rd->next;
 		}

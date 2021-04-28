@@ -26,11 +26,13 @@ void
 		key = get_key_env_item(t[i]);
 		if (!strcmp(key, del_item))
 		{
+			free(t[i]);
 			while (t[i])
 			{
 				t[i] = t[i + 1];
 				++i;
 			}
+			free(key);
 			break ;
 		}
 		free(key);

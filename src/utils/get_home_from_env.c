@@ -10,7 +10,11 @@ char	*get_dict_val_by_key(char *key, char **envp)
 	{
 		item_key = get_key_env_item(*t);
 		if (!strcmp(item_key, key))
+		{
+			free(item_key);
 			return (get_value_env_item(*t));
+		}
+		free(item_key);
 		++t;
 	}
 	return (0);
