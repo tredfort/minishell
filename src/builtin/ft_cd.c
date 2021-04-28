@@ -27,7 +27,7 @@ void	ft_cd(char **argv, char ***envp)
 
 	g_mini.status = 0;
 	old_pwd = getcwd(NULL, 0);
-	if ((!argv || !*argv) && chdir(get_dict_val_by_key("HOME", *envp)) == -1)
+	if ((!argv || !*argv) && chdir(get_value(*envp, "HOME")) == -1)
 	{
 		ft_strerror("HOME not set", "cd");
 		g_mini.status = 1;
