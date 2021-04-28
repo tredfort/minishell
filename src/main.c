@@ -6,7 +6,7 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/14 19:15:13 by tredfort          #+#    #+#             */
-/*   Updated: 2021/04/26 23:42:16 by smephest         ###   ########.fr       */
+/*   Updated: 2021/04/28 22:28:23 by smephest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,13 @@ void	sigint_handler(int sig_num)
 	}
 }
 
+void
+	init_signals(void)
+{
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, sigint_handler);
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	char	*line;
@@ -42,15 +49,13 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, sigint_handler);
+	init_signals();
 	envp = init_envp_with_default_variables(env);
-//	init_history(get_value(env, "HOME"));
+	init_history(get_value(env, "HOME"));
 	while (envp)
 	{
 		prompt();
 		get_next_command(env, &line);
-//		get_next_line(STDIN_FILENO, &line);
 		g_mini.status_set = 0;
 		if (line && !lexer(line))
 		{
@@ -58,7 +63,6 @@ int	main(int argc, char **argv, char **env)
 			parser(line, &lst);
 			string_formatting(lst, envp);
 			ft_executor(lst, &envp);
-//			print(lst);
 			clear_command_list(lst);
 		}
 		free(line);

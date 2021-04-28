@@ -6,7 +6,7 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/14 19:17:11 by tredfort          #+#    #+#             */
-/*   Updated: 2021/03/14 19:17:13 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/28 22:38:25 by smephest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@
 # define ERROR_MSG12 "minishell: syntax error near unexpected token `<<'"
 # define ERROR_MSG13 "minishell: syntax error near unexpected token `\\'"
 # include "../libft/libft.h"
-//TODO::remove it before mark as completed
-# include <stdio.h>
 # include <unistd.h>
 # include <string.h>
 # include <stdlib.h>
@@ -41,25 +39,25 @@
 # include <curses.h>
 # define SHELL_BUFFER 4095
 
-typedef struct	s_sh
+typedef struct s_sh
 {
 	char		**argv;
 	int			pipe;
 	t_list		*redir;
 }				t_sh;
 
-typedef struct 	s_proc
+typedef struct s_proc
 {
-	int 		fd[2];
-	int 		pid;
+	int		fd[2];
+	int		pid;
 }				t_proc;
 
-typedef struct	s_2list
+typedef struct s_2list
 {
 	char		*content;
 	void		*prev;
 	void		*next;
-} 				t_2list;
+}				t_2list;
 
 typedef struct s_mini
 {
@@ -67,43 +65,44 @@ typedef struct s_mini
 	t_2list			*lst;
 	struct termios	basic;
 	int				status;
-	int 			*pids;
-	int 			status_set;
-} 				t_mini;
+	int				*pids;
+	int				status_set;
+}				t_mini;
 
 t_mini		g_mini;
 
-int			get_next_line(int fd, char **line);
-t_2list		*ft_2lstnew(void *content);
-void		ft_2lstadd_front(t_2list **lst, t_2list *new);
-int			lexer(char *line);
-void		parser(char *line, t_list **lst);
-void		string_formatting(t_list *lst, char **env);
-void		print(t_list *lst);
+int				get_next_line(int fd, char **line);
+t_2list			*ft_2lstnew(void *content);
+void			ft_2lstadd_front(t_2list **lst, t_2list *new);
+int				lexer(char *line);
+void			parser(char *line, t_list **lst);
+void			string_formatting(t_list *lst, char **env);
+void			print(t_list *lst);
 
-char		after_spaces(const char *str);
-char		skip_quotes(const char *str, int *i);
-void		skip_shielding(const char *str, int *i);
-void		skip_spaces(const char *str, int *i);
-char		*get_value(char **env, char *key);
-void		ft_exec(char *cmd, char **argv, char ***envp, int is_child_process);
-void		ft_executor(t_list *lst, char ***envp);
-void		ft_pipe(t_sh *temp, char ***envp, t_list **process, int redir_flag);
-
-void		init_history(char *path);
-void		save_history(void);
-void		get_next_command(char **env, char **line);
-void		input_cycle(char **line, char **tmp, t_2list *lst);
-void		sound_signal(void);
-void		ft_strdup_and_free(char **old_str, char *new_str);
-void		previous_command(t_2list **lst, char **tmp, char **line);
-void		next_command(t_2list **lst, char **tmp, char **line);
-void		add_buffer(char **line, char *buf);
-int			my_putchar(int c);
-void		clear_command_list(t_list *lst);
-void		enable_basic_mode(void);
-void		remove_shielding(char **str);
-int			is_numeric_argument(char *str);
+char			after_spaces(const char *str);
+char			skip_quotes(const char *str, int *i);
+void			skip_shielding(const char *str, int *i);
+void			skip_spaces(const char *str, int *i);
+char			*get_value(char **env, char *key);
+void			ft_exec(char *cmd,
+					char **argv, char ***envp, int is_child_process);
+void			ft_executor(t_list *lst, char ***envp);
+void			ft_pipe(t_sh *temp,
+					char ***envp, t_list **process, int redir_flag);
+void			init_history(char *path);
+void			save_history(void);
+void			get_next_command(char **env, char **line);
+void			input_cycle(char **line, char **tmp, t_2list *lst);
+void			sound_signal(void);
+void			ft_strdup_and_free(char **old_str, char *new_str);
+void			previous_command(t_2list **lst, char **tmp, char **line);
+void			next_command(t_2list **lst, char **tmp, char **line);
+void			add_buffer(char **line, char *buf);
+int				my_putchar(int c);
+void			clear_command_list(t_list *lst);
+void			enable_basic_mode(void);
+void			remove_shielding(char **str);
+int				is_numeric_argument(char *str);
 
 /*
 ** utils
@@ -140,9 +139,9 @@ int				free_and_return(char **str, int status);
 void			ft_cd(char **argv, char ***envp);
 void			ft_echo(char **argv);
 void			ft_env(char **envp);
-void 			ft_exit(char **argv);
+void			ft_exit(char **argv);
 void			ft_export(char **argv, char ***envp);
-void			ft_pwd();
-void 			ft_unset(char **argv, char ***envp);
+void			ft_pwd(void);
+void			ft_unset(char **argv, char ***envp);
 
 #endif

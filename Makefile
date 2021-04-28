@@ -6,7 +6,7 @@
 #    By: tredfort <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/14 19:12:54 by tredfort          #+#    #+#              #
-#    Updated: 2021/03/14 19:13:15 by tredfort         ###   ########.fr        #
+#    Updated: 2021/04/28 22:30:51 by smephest         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,6 @@ SRCS =		main.c \
             input_cycle.c \
             utils_for_input.c \
             remove_shielding.c \
-            print.c \
             utils.c \
             get_next_line.c \
             get_next_command.c \
@@ -63,10 +62,7 @@ OBJS = $(addprefix $(DIR_OBJS)/, $(SRCS:.c=.o))
 
 CC = gcc
 
-#TODO: remove before completion
-LINUX_LIB = #-lncurses
-
-FLAGS = #-Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror
 
 INC = includes
 

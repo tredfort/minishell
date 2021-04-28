@@ -6,7 +6,7 @@
 /*   By: smephest <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 23:27:05 by smephest          #+#    #+#             */
-/*   Updated: 2021/04/27 23:21:55 by smephest         ###   ########.fr       */
+/*   Updated: 2021/04/28 22:32:18 by smephest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void
 	char	**t;
 	char	**new_t;
 	char	**new;
-	size_t	i;
+	int		i;
 
 	i = get_key_index(str, env);
 	if (i != -1)

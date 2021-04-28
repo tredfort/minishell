@@ -6,7 +6,7 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 05:55:59 by tredfort          #+#    #+#             */
-/*   Updated: 2021/04/22 02:24:44 by tredfort         ###   ########.fr       */
+/*   Updated: 2021/04/28 22:31:21 by smephest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	get_next_command(char **env, char **line)
 	char	*tmp;
 	t_2list	*lst;
 
+	lst = NULL;
 	tmp = NULL;
 	enable_custom_mode(get_value(env, "TERM"));
 	tputs(save_cursor, 1, my_putchar);

@@ -6,7 +6,7 @@
 /*   By: smephest <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 20:15:30 by smephest          #+#    #+#             */
-/*   Updated: 2021/04/27 23:20:10 by smephest         ###   ########.fr       */
+/*   Updated: 2021/04/28 22:39:35 by smephest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,9 @@ int
 	char		*bin_path;
 	struct stat	st;
 	int			pid;
-	char		*cmd;
 
-	cmd = argv[0];
-	bin_path = get_bin_path(path, cmd);
+	pid = -1;
+	bin_path = get_bin_path(path, argv[0]);
 	if (stat(bin_path, &st) != -1 )
 	{
 		if (!(st.st_mode & S_IXUSR))
@@ -49,7 +48,7 @@ int
 		{
 			pid = fork();
 			if (pid < 0)
-				ft_strerror(strerror(errno), cmd);
+				ft_strerror(strerror(errno), argv[0]);
 		}
 		if (is_child_process || pid == 0)
 			execve(bin_path, argv, envp);
@@ -130,7 +129,7 @@ void
 		else if (!ft_strcmp(cmd, "export"))
 			ft_export(argv + 1, envp);
 		else if (!ft_strcmp(cmd, "pwd"))
-			ft_pwd(argv + 1);
+			ft_pwd();
 		else if (!ft_strcmp(cmd, "unset"))
 			ft_unset(argv + 1, envp);
 		else

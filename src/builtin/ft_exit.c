@@ -6,7 +6,7 @@
 /*   By: smephest <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 23:34:53 by smephest          #+#    #+#             */
-/*   Updated: 2021/04/27 23:13:08 by smephest         ###   ########.fr       */
+/*   Updated: 2021/04/28 22:27:14 by smephest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,13 @@ int	is_numeric_argument(char *str)
 	return (1);
 }
 
+void
+	save_and_exit(int status)
+{
+	save_history();
+	exit(status);
+}
+
 void	ft_exit(char **args)
 {
 	char	*error_msg;
@@ -41,20 +48,13 @@ void	ft_exit(char **args)
 			error_msg = ft_strjoin(args[0], ": numeric argument required");
 			ft_strerror(error_msg, "exit");
 			free(error_msg);
-			//	save_history();
-			exit(255);
+			save_and_exit(255);
 		}
 		if (!args[1])
-		{
-			//	save_history();
-			exit((unsigned char)ft_atoi(args[0]));
-		}
+			save_and_exit((unsigned char)ft_atoi(args[0]));
 		ft_strerror("too many arguments", "exit");
 		g_mini.status = 1;
 	}
 	else
-	{
-		//	save_history();
-		exit(0);
-	}
+		save_and_exit(0);
 }
