@@ -6,7 +6,7 @@
 /*   By: tredfort <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/14 19:17:11 by tredfort          #+#    #+#             */
-/*   Updated: 2021/04/28 22:38:25 by smephest         ###   ########.fr       */
+/*   Updated: 2021/04/29 19:53:55 by smephest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ typedef struct s_mini
 	t_2list			*lst;
 	struct termios	basic;
 	int				status;
-	int				*pids;
 	int				status_set;
 }				t_mini;
 
