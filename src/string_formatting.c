@@ -37,6 +37,11 @@ static void	join_not_alpha(char **remainder, char **str)
 		*str = ft_strjoin_and_free(str, number);
 		free(number);
 	}
+	else
+	{
+		*remainder += 1;
+		return ;
+	}
 	*remainder += 2;
 }
 
@@ -55,7 +60,7 @@ static void	join_value(char **remainder, char **str, char **env, int *i)
 			*remainder += *i;
 			*i = 0;
 		}
-		if (!ft_isalpha(*(*remainder + 1)))
+		if (!ft_isalpha(*(*remainder + 1)) || !ft_strchr("'\"", *(*remainder + 1)))
 			join_not_alpha(remainder, str);
 		else if (get_keys(*remainder + 1, &key))
 		{

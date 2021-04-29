@@ -34,6 +34,7 @@ static int	interrupt_signal(char **line)
 	write(STDIN_FILENO, "\n", 1);
 	free(*line);
 	*line = NULL;
+	g_mini.status = 1;
 	return (1);
 }
 

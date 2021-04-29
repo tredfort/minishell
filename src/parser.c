@@ -83,8 +83,8 @@ void	parser(char *line, t_list **lst)
 		skip_spaces(line, &i);
 		skip_shielding(line, &i);
 		skip_quotes(line, &i);
-		if (ft_strchr(";|", line[i])
-			|| (ft_strchr(";|", after_spaces(line + i + 1)) && ++i))
+		if (ft_strchr(";|", line[i]) || (line[i] != '\\'
+				&& ft_strchr(";|", after_spaces(line + i + 1)) && ++i))
 		{
 			if (line[i] == '|' || after_spaces(line + i) == '|')
 				cmd = add_new_command(line + start, i - start, 1);

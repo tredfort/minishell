@@ -41,12 +41,15 @@ char	skip_quotes(const char *str, int *i)
 		quote = str[(*i)++];
 		while (str[(*i)] && quote)
 		{
-			skip_shielding(str, i);
+			if (quote == '"')
+				skip_shielding(str, i);
 			if ((str[*i] == '"' || str[*i] == '\'') && str[*i] == quote)
 				quote = 0;
 			(*i)++;
 		}
 	}
+	if (str[*i] == '"' || str[*i] == '\'')
+		quote = skip_quotes(str, i);
 	return (quote);
 }
 

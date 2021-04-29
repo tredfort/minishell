@@ -56,6 +56,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		prompt();
 		get_next_command(env, &line);
+//		get_next_line(0, &line);
 		g_mini.status_set = 0;
 		if (line && !lexer(line))
 		{
